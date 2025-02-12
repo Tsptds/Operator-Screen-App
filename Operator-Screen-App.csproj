@@ -10,8 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Connections\" />
-    <Folder Include="Logics\" />
+    <PackageReference Include="NLog" Version="5.4.0" />
   </ItemGroup>
 
 </Project>

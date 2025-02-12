@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Display";
+            btnSimulateOp = new Button();
+            SuspendLayout();
+            // 
+            // btnSimulateOp
+            // 
+            btnSimulateOp.Location = new Point(337, 43);
+            btnSimulateOp.Name = "btnSimulateOp";
+            btnSimulateOp.Size = new Size(324, 142);
+            btnSimulateOp.TabIndex = 0;
+            btnSimulateOp.Text = "Simulate Operation";
+            btnSimulateOp.UseVisualStyleBackColor = true;
+            btnSimulateOp.Click += this.btnSimulateOp_Click;
+            // 
+            // Display
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btnSimulateOp);
+            Name = "Display";
+            Text = "Display";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button btnSimulateOp;
     }
 }
