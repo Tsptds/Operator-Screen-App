@@ -27,11 +27,25 @@ namespace Operator_Screen_App
 
 
             // Find the header-body separator (\r\n\r\n)
-            int index = json.IndexOf("\r\n\r\n");
-            if (index != -1)
+            int idx1 = json.IndexOf("\r\n\r\n");
+            if (idx1 != -1)
             {
-                MessageBox.Show($"{index}", "index");
-                json = json.Substring(index + 4); // Extract everything after the headers
+                MessageBox.Show($"{idx1}", "index");
+                json = json.Substring(idx1 + 4); // Extract everything after the headers
+
+                int idx2 = json.IndexOf("{");
+                if (idx2 != -1)
+                {
+                    MessageBox.Show($"{idx2}", "index inner");
+                    json = json.Substring(idx2 - 1);
+
+                    int idx3 = json.IndexOf("}");
+                    if (idx3 != -1)
+                    {
+                        MessageBox.Show($"{idx3}", "index tail");
+                        json = json.Substring(0, idx3 + 1);
+                    }
+                }
             }
             MessageBox.Show(json, "HTTP RESPONSE");
 
