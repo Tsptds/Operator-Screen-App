@@ -35,6 +35,7 @@ namespace Operator_Screen_App.Connections
                     byte[] requestBytes = Encoding.ASCII.GetBytes(request);
                     sslStream.Write(requestBytes, 0, requestBytes.Length);
                     sslStream.Flush();
+                    sslStream.ReadTimeout = 5000;
 
                     // Read response
                     using (MemoryStream memoryStream = new MemoryStream())
@@ -49,6 +50,14 @@ namespace Operator_Screen_App.Connections
                         // Convert response to string
                         string response = Encoding.ASCII.GetString(memoryStream.ToArray());
                         Console.WriteLine(response);
+                        
+                        // Find the header-body separator (\r\n\r\n)
+                        int index = response.IndexOf("\r\n\r\n");
+                        if (index != -1)
+                        {
+                            response = response.Substring(index + 4); // Extract everything after the headers
+                        }
+                        MessageBox.Show(response);
 
                         return response;
                     }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             btnSimulateOp = new Button();
+            btnLists = new Button();
             SuspendLayout();
             // 
             // btnSimulateOp
@@ -39,13 +40,24 @@
             btnSimulateOp.TabIndex = 0;
             btnSimulateOp.Text = "Simulate Operation";
             btnSimulateOp.UseVisualStyleBackColor = true;
-            btnSimulateOp.Click += this.btnSimulateOp_Click;
+            btnSimulateOp.Click += btnSimulateOp_Click;
+            // 
+            // btnLists
+            // 
+            btnLists.Location = new Point(337, 327);
+            btnLists.Name = "btnLists";
+            btnLists.Size = new Size(292, 111);
+            btnLists.TabIndex = 1;
+            btnLists.Text = "Show Linked List";
+            btnLists.UseVisualStyleBackColor = true;
+            btnLists.Click += btnLists_Click;
             // 
             // Display
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnLists);
             Controls.Add(btnSimulateOp);
             Name = "Display";
             Text = "Display";
@@ -55,5 +67,6 @@
         #endregion
 
         private Button btnSimulateOp;
+        private Button btnLists;
     }
 }

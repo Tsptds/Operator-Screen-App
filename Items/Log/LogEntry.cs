@@ -2,15 +2,15 @@
 {
     public class LogEntry
     {
-        public string? LogID { get; set; }
-        public string? ComputerHash { get; set; }
-        public string? IPAddress { get; set; }
-        public string? UserID { get; set; }
-        public string? Username { get; set; }
-        public string? AccessLocation { get; set; }
-        public int AccessDirection { get; set; }
-        public int VerifyStatusCode { get; set; }
-        public string? AdditionalInfo { get; set; }
-        public string? LogTime { get; set; }
+        public string? logID { get; set; }
+        public string? computerHash { get; set; }
+        public string? ipAddress { get; set; }
+        public string? userID { get; set; }
+        public string? username { get; set; }
+        public string? accessLocation { get; set; }
+        public int accessDirection { get; set; }
+        public int verifyStatusCode { get; set; }
+        public string? additionalInfo { get; set; }
+        public string? logTime { get; set; }
     }
 }

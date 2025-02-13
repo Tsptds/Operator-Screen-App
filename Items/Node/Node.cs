@@ -44,7 +44,9 @@ namespace Operator_Screen_App.Items.Node
             Node? current = head;
             while (current != null)
             {
-                Console.WriteLine(current.ToString());
+                MessageBox.Show(current.Data.username.ToString());
+
+                current = current.Next;
             }
         }
     }
