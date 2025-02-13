@@ -23,25 +23,31 @@ namespace Operator_Screen_App
             MessageBox.Show("Attempting Operation Simulation", "Alert", MessageBoxButtons.OK);
             //string json = RequestLog.FetchJson();
 
-            string json = Json_response.getString();
+            string json = Json_response.getString(true);
 
 
             // Find the header-body separator (\r\n\r\n)
             int index = json.IndexOf("\r\n\r\n");
             if (index != -1)
             {
+                MessageBox.Show($"{index}", "index");
                 json = json.Substring(index + 4); // Extract everything after the headers
             }
-            MessageBox.Show(json);
+            MessageBox.Show(json, "HTTP RESPONSE");
 
-            LogEntry? parsedData = JsonSerializer.Deserialize<LogEntry>(json);
-
-            if (parsedData != null)
+            try
             {
-                //LogList logList = new();
-                logList.Append(parsedData);
-                logList.Print();
+                LogEntry? parsedData = JsonSerializer.Deserialize<LogEntry>(json);
+                if (parsedData != null)
+                {
+                    //LogList logList = new();
+                    logList.Append(parsedData);
+                }
+            } catch (Exception ex)
+            {
+                    MessageBox.Show(ex.ToString());
             }
+
         }
 
         private void btnLists_Click(object sender, EventArgs e)

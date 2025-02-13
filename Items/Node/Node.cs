@@ -44,7 +44,7 @@ namespace Operator_Screen_App.Items.Node
             Node? current = head;
             while (current != null)
             {
-                MessageBox.Show(current.Data.username.ToString());
+                MessageBox.Show(current.Data.username.ToString(), $"LOG ID {current.Data.logID.ToString()}");
 
                 current = current.Next;
             }
