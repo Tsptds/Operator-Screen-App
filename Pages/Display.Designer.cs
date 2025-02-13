@@ -46,7 +46,7 @@
             // 
             // btnSimulateOp
             // 
-            btnSimulateOp.Location = new Point(25, 42);
+            btnSimulateOp.Location = new Point(281, 42);
             btnSimulateOp.Name = "btnSimulateOp";
             btnSimulateOp.Size = new Size(324, 142);
             btnSimulateOp.TabIndex = 0;
@@ -56,11 +56,11 @@
             // 
             // btnLists
             // 
-            btnLists.Location = new Point(383, 42);
+            btnLists.Location = new Point(793, 42);
             btnLists.Name = "btnLists";
             btnLists.Size = new Size(324, 142);
             btnLists.TabIndex = 1;
-            btnLists.Text = "Show Linked List";
+            btnLists.Text = "Echo Verbose";
             btnLists.UseVisualStyleBackColor = true;
             btnLists.Click += btnLists_Click;
             // 
@@ -68,10 +68,10 @@
             // 
             gridLog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridLog.Columns.AddRange(new DataGridViewColumn[] { logID, computerHash, ipAddress, userID, username, accessLocation, accessDirection, verifyStatusCode, additionalInfo, logTime });
-            gridLog.Location = new Point(25, 246);
+            gridLog.Location = new Point(12, 246);
             gridLog.Name = "gridLog";
             gridLog.RowHeadersWidth = 51;
-            gridLog.Size = new Size(1307, 126);
+            gridLog.Size = new Size(1358, 234);
             gridLog.TabIndex = 3;
             // 
             // logID
@@ -158,7 +158,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1352, 443);
+            ClientSize = new Size(1382, 492);
             Controls.Add(gridLog);
             Controls.Add(btnLists);
             Controls.Add(btnSimulateOp);

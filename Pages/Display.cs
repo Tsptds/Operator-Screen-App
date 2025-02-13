@@ -40,19 +40,19 @@ namespace Operator_Screen_App
 
             // Find the header-body separator (\r\n\r\n)
             int idx1 = json.IndexOf("\r\n");
-            MessageBox.Show($"{idx1}", "index header end");
+            //MessageBox.Show($"{idx1}", "index header end");
             if (idx1 != -1)
             {
                 json = json.Substring(idx1 + 2); // Extract everything after the headers
 
                 int idx2 = json.IndexOf("{");
-                MessageBox.Show($"{idx2}", "index inner");
+                //MessageBox.Show($"{idx2}", "index inner");
                 if (idx2 != -1)
                 {
                     json = json.Substring(idx2 );
 
                     int idx3 = json.IndexOf("}");
-                    MessageBox.Show($"{idx3}", "index tail");
+                    //MessageBox.Show($"{idx3}", "index tail");
                     if (idx3 != -1)
                     {
                         json = json.Substring(0, idx3 + 1);
@@ -73,11 +73,13 @@ namespace Operator_Screen_App
             {
                 MessageBox.Show(ex.ToString());
             }
+            nodeList.AssignContentToGrid(gridLog);
         }
 
         private void btnLists_Click(object sender, EventArgs e)
         {
             nodeList.Print();
+            nodeList.AssignContentToGrid(gridLog);
         }
     }
 }
