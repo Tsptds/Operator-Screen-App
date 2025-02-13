@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Operator_Screen_App.Logics
 {
-    internal class AddNewLog
+    internal class FillGridView
     {
-
+        
     }
 }
