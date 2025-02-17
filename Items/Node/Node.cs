@@ -32,12 +32,12 @@ namespace Operator_Screen_App.Items.Node
             {
                 head = new Node(log);
                 tail = head;
-                MessageBox.Show($"Node with username {head.Data?.username} added to list");
+                //MessageBox.Show($"Node with username {head.Data?.username} added to list");
             }
             else {
                 tail.Next = new Node(log) { Prev = tail};
                 tail = tail.Next;
-                MessageBox.Show($"Node with username {tail.Data.username} added to list");
+                //MessageBox.Show($"Node with username {tail.Data.username} added to list");
             }
 
         }

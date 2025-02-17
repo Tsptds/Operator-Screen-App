@@ -46,7 +46,7 @@
             // 
             // btnSimulateOp
             // 
-            btnSimulateOp.Location = new Point(12, 42);
+            btnSimulateOp.Location = new Point(12, 66);
             btnSimulateOp.Name = "btnSimulateOp";
             btnSimulateOp.Size = new Size(324, 142);
             btnSimulateOp.TabIndex = 0;
@@ -56,7 +56,7 @@
             // 
             // btnLists
             // 
-            btnLists.Location = new Point(992, 42);
+            btnLists.Location = new Point(995, 66);
             btnLists.Name = "btnLists";
             btnLists.Size = new Size(324, 142);
             btnLists.TabIndex = 1;
@@ -66,12 +66,13 @@
             // 
             // gridLog
             // 
+            gridLog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             gridLog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridLog.Columns.AddRange(new DataGridViewColumn[] { logID, computerHash, ipAddress, userID, username, accessLocation, accessDirection, verifyStatusCode, additionalInfo, logTime });
             gridLog.Location = new Point(12, 246);
             gridLog.Name = "gridLog";
             gridLog.RowHeadersWidth = 51;
-            gridLog.Size = new Size(1304, 234);
+            gridLog.Size = new Size(1307, 234);
             gridLog.TabIndex = 3;
             // 
             // logID
@@ -80,7 +81,6 @@
             logID.MinimumWidth = 6;
             logID.Name = "logID";
             logID.ReadOnly = true;
-            logID.Width = 125;
             // 
             // computerHash
             // 
@@ -88,7 +88,6 @@
             computerHash.MinimumWidth = 6;
             computerHash.Name = "computerHash";
             computerHash.ReadOnly = true;
-            computerHash.Width = 125;
             // 
             // ipAddress
             // 
@@ -96,7 +95,6 @@
             ipAddress.MinimumWidth = 6;
             ipAddress.Name = "ipAddress";
             ipAddress.ReadOnly = true;
-            ipAddress.Width = 125;
             // 
             // userID
             // 
@@ -104,7 +102,6 @@
             userID.MinimumWidth = 6;
             userID.Name = "userID";
             userID.ReadOnly = true;
-            userID.Width = 125;
             // 
             // username
             // 
@@ -112,7 +109,6 @@
             username.MinimumWidth = 6;
             username.Name = "username";
             username.ReadOnly = true;
-            username.Width = 125;
             // 
             // accessLocation
             // 
@@ -120,7 +116,6 @@
             accessLocation.MinimumWidth = 6;
             accessLocation.Name = "accessLocation";
             accessLocation.ReadOnly = true;
-            accessLocation.Width = 125;
             // 
             // accessDirection
             // 
@@ -128,7 +123,6 @@
             accessDirection.MinimumWidth = 6;
             accessDirection.Name = "accessDirection";
             accessDirection.ReadOnly = true;
-            accessDirection.Width = 125;
             // 
             // verifyStatusCode
             // 
@@ -136,7 +130,6 @@
             verifyStatusCode.MinimumWidth = 6;
             verifyStatusCode.Name = "verifyStatusCode";
             verifyStatusCode.ReadOnly = true;
-            verifyStatusCode.Width = 125;
             // 
             // additionalInfo
             // 
@@ -144,7 +137,6 @@
             additionalInfo.MinimumWidth = 6;
             additionalInfo.Name = "additionalInfo";
             additionalInfo.ReadOnly = true;
-            additionalInfo.Width = 125;
             // 
             // logTime
             // 
@@ -152,7 +144,6 @@
             logTime.MinimumWidth = 6;
             logTime.Name = "logTime";
             logTime.ReadOnly = true;
-            logTime.Width = 125;
             // 
             // Display
             // 
@@ -164,7 +155,12 @@
             Controls.Add(gridLog);
             Controls.Add(btnLists);
             Controls.Add(btnSimulateOp);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Display";
+            SizeGripStyle = SizeGripStyle.Hide;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Display";
             FormClosing += Display_FormClosing;
             ((System.ComponentModel.ISupportInitialize)gridLog).EndInit();
