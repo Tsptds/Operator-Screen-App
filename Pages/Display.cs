@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using Operator_Screen_App._ignore;
+using Operator_Screen_App.Pages;
 
 namespace Operator_Screen_App
 {
@@ -24,10 +25,11 @@ namespace Operator_Screen_App
         {
             //System.Media.SystemSounds.Beep.Play();
 
-            string json="";
+            string json = "";
             try
             {
-                //json = RequestLog.FetchJson();
+                //json1 = RequestLog.FetchJson();
+                json = Json_response.getString();
             }
             catch (Exception ex)
             {
@@ -35,7 +37,6 @@ namespace Operator_Screen_App
             }
 
 
-            json = Json_response.getString();
 
 
             // Find the header-body separator (\r\n\r\n)
@@ -49,7 +50,7 @@ namespace Operator_Screen_App
                 //MessageBox.Show($"{idx2}", "index inner");
                 if (idx2 != -1)
                 {
-                    json = json.Substring(idx2 );
+                    json = json.Substring(idx2);
 
                     int idx3 = json.IndexOf("}");
                     //MessageBox.Show($"{idx3}", "index tail");
@@ -68,18 +69,34 @@ namespace Operator_Screen_App
                 {
                     nodeList.Append(parsedData);
                 }
-            } 
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
             nodeList.AssignContentToGrid(gridLog);
+
+            if (nodeList.tail.Data.verifyStatusCode > 0)
+                popUp(nodeList.tail.Data.verifyStatusCode);
         }
 
         private void btnLists_Click(object sender, EventArgs e)
         {
             nodeList.Print();
             nodeList.AssignContentToGrid(gridLog);
+        }
+
+        private void popUp(UInt16 code)
+        {
+            PopUp PopupScreen = new(code);
+            PopupScreen.Show();
+        }
+
+        private void Display_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Exit?", "Confirmation", MessageBoxButtons.OKCancel);
+            
+            if(result == DialogResult.Cancel) e.Cancel = true;
         }
     }
 }

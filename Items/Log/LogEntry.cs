@@ -9,7 +9,7 @@
         public string? username { get; set; }
         public string? accessLocation { get; set; }
         public int accessDirection { get; set; }
-        public int verifyStatusCode { get; set; }
+        public UInt16 verifyStatusCode { get; set; }
         public string? additionalInfo { get; set; }
         public string? logTime { get; set; }
     }

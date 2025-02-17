@@ -4,5 +4,8 @@
     <Compile Update="Pages\Display.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Pages\PopUp.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

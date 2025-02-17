@@ -46,7 +46,7 @@
             // 
             // btnSimulateOp
             // 
-            btnSimulateOp.Location = new Point(281, 42);
+            btnSimulateOp.Location = new Point(12, 42);
             btnSimulateOp.Name = "btnSimulateOp";
             btnSimulateOp.Size = new Size(324, 142);
             btnSimulateOp.TabIndex = 0;
@@ -56,7 +56,7 @@
             // 
             // btnLists
             // 
-            btnLists.Location = new Point(793, 42);
+            btnLists.Location = new Point(992, 42);
             btnLists.Name = "btnLists";
             btnLists.Size = new Size(324, 142);
             btnLists.TabIndex = 1;
@@ -71,7 +71,7 @@
             gridLog.Location = new Point(12, 246);
             gridLog.Name = "gridLog";
             gridLog.RowHeadersWidth = 51;
-            gridLog.Size = new Size(1358, 234);
+            gridLog.Size = new Size(1304, 234);
             gridLog.TabIndex = 3;
             // 
             // logID
@@ -158,12 +158,15 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1382, 492);
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            ClientSize = new Size(1331, 492);
             Controls.Add(gridLog);
             Controls.Add(btnLists);
             Controls.Add(btnSimulateOp);
             Name = "Display";
             Text = "Display";
+            FormClosing += Display_FormClosing;
             ((System.ComponentModel.ISupportInitialize)gridLog).EndInit();
             ResumeLayout(false);
         }
