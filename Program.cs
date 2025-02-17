@@ -15,6 +15,8 @@ namespace Operator_Screen_App
         {
             ApplicationConfiguration.Initialize();
             Application.Run(new Display());
+
+            //TODO: Add Logs with NLog
         }
     }
 }

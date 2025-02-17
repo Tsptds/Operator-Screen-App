@@ -9,13 +9,17 @@ namespace Operator_Screen_App.Logics
 {
     internal class FillGridView
     {
-        public static void FillGrid(DataGridView grid, Node head)
+        private static int entryNo = 0;
+        public static void FillGrid(DataGridView grid, Node tail, int listLength)
         {
-            if (head == null || grid == null)
+            if (tail == null || grid == null)
                 return;
+            entryNo = listLength;
 
             // Ensure the grid has the appropriate columns
             grid.Columns.Clear();
+            grid.Columns.Add("Log No: ", "entryNo");
+
             grid.Columns.Add("logID", "logID");
             grid.Columns.Add("computerHash", "computerHash");
             grid.Columns.Add("ipAddress", "ipAddress");
@@ -28,10 +32,12 @@ namespace Operator_Screen_App.Logics
             grid.Columns.Add("logTime", "logTime");
 
             // Iterate through the linked list and populate the grid
-            Node current = head;
-            while (current != null)
+            Node current = tail;
+            for(int i = listLength; i > 0; i--)
             {
                 grid.Rows.Add(
+                    entryNo,
+
                     current.Data.logID,
                     current.Data.computerHash,
                     current.Data.ipAddress,
@@ -43,8 +49,8 @@ namespace Operator_Screen_App.Logics
                     current.Data.additionalInfo,
                     current.Data.logTime
                 );
-
-                current = current.Next;
+                entryNo--;
+                current = current.Prev;
             }
         }
     }

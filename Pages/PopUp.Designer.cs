@@ -35,6 +35,7 @@
             lblAttention = new Label();
             lblContext = new Label();
             lblConfirm = new Label();
+            tmrAlert = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
             // tmrConfirm
@@ -104,6 +105,11 @@
             lblConfirm.Text = "Please Confirm Manually";
             lblConfirm.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // tmrAlert
+            // 
+            tmrAlert.Interval = 1000;
+            tmrAlert.Tick += tmrAlert_Tick;
+            // 
             // PopUp
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -136,5 +142,6 @@
         private Label lblAttention;
         private Label lblContext;
         private Label lblConfirm;
+        private System.Windows.Forms.Timer tmrAlert;
     }
 }

@@ -25,6 +25,7 @@ namespace Operator_Screen_App.Items.Node
     {
         public Node? head { get; set; }
         public Node? tail { get; set; }
+        public int listLength = 0;
 
         public void Append(LogEntry log)
         {
@@ -39,7 +40,7 @@ namespace Operator_Screen_App.Items.Node
                 tail = tail.Next;
                 //MessageBox.Show($"Node with username {tail.Data.username} added to list");
             }
-
+            listLength++;
         }
 
         public void Print()
@@ -67,9 +68,9 @@ namespace Operator_Screen_App.Items.Node
         }
 
         // Takes the grid object and assigns the cols of LogEntry
-        public void AssignContentToGrid(DataGridView grid)
+        public void AssignContentToGrid(int listLength, DataGridView grid)
         {
-            FillGridView.FillGrid(grid, head);
+            FillGridView.FillGrid(grid, tail, listLength);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Operator_Screen_App
             {
                 MessageBox.Show(ex.ToString());
             }
-            nodeList.AssignContentToGrid(gridLog);
+            nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
 
             VerifyStatusCode status = (VerifyStatusCode)nodeList.tail.Data.verifyStatusCode;
 
@@ -86,12 +86,13 @@ namespace Operator_Screen_App
         private void btnLists_Click(object sender, EventArgs e)
         {
             nodeList.Print();
-            nodeList.AssignContentToGrid(gridLog);
+            nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
         }
 
         private void popUp(VerifyStatusCode code)
         {
-            PopUp PopupScreen = new(code);
+            this.Visible = false;
+            PopUp PopupScreen = new(this, code);
             PopupScreen.Show();
         }
 

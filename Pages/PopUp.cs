@@ -16,14 +16,18 @@ namespace Operator_Screen_App.Pages
     public partial class PopUp : Form
     {
         private UInt16 timeout;
+        private UInt16 messageDisplayTime;
         private VerifyStatusCode displayCode;
-        private bool shouldClose = false;
-        public PopUp(VerifyStatusCode statusCode)
+        private Form parentForm;
+        public PopUp(Form parent, VerifyStatusCode statusCode)
         {
             timeout = 30;
+            messageDisplayTime = 5;
             displayCode = statusCode;
+
             InitializeComponent();
             lblContext.Text = $"Status: {(displayCode.context())}";
+            parentForm = parent;
             tmrConfirm.Start();
         }
 
@@ -33,7 +37,14 @@ namespace Operator_Screen_App.Pages
             if (timeout < 1)
             {
                 tmrConfirm.Stop();
-                shouldClose = true;
+                tmrAlert.Start();
+                MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
+
+
+                //TODO: Read SMTP settings from Settings.ini, Send Mail to supervisor
+
+
+                parentForm.Visible = true;
                 this.Close();
                 Dispose();
             }
@@ -56,10 +67,34 @@ namespace Operator_Screen_App.Pages
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             tmrConfirm.Stop();
-            shouldClose = true;
-            MessageBox.Show("Identity Confirmend", "Success");
-            this.Close();
-            Dispose();
+            tmrAlert.Start();
+            DialogResult result = MessageBox.Show("Identity Confirmed", "Success");
+            if (result == DialogResult.OK)
+            {
+                tmrAlert.Stop();
+
+                //TODO: Post to API with Log ID & Description
+
+
+                parentForm.Visible = true;
+                this.Close();
+                Dispose();
+            }
+        }
+
+        private void tmrAlert_Tick(object sender, EventArgs e)
+        {
+            if (messageDisplayTime < 1)
+            {
+                tmrAlert.Stop();
+                parentForm.Visible = true;
+                this.Close();
+                Dispose();
+            }
+            else
+            {
+                messageDisplayTime -= 1;
+            }
         }
     }
 }
