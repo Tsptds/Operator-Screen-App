@@ -122,7 +122,7 @@
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PopUp";
-            Deactivate += PopUp_Deactivate;
+            TopMost = true;
             FormClosing += PopUp_FormClosing;
             ResumeLayout(false);
             PerformLayout();

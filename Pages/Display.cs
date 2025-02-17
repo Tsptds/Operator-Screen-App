@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using Operator_Screen_App._ignore;
 using Operator_Screen_App.Pages;
+using Operator_Screen_App.Items.Log.Attributes;
 
 namespace Operator_Screen_App
 {
@@ -60,7 +61,7 @@ namespace Operator_Screen_App
                     }
                 }
             }
-            MessageBox.Show(json, "Stripped HTTP RESPONSE");
+            //MessageBox.Show(json, "Stripped HTTP RESPONSE");
 
             try
             {
@@ -76,8 +77,10 @@ namespace Operator_Screen_App
             }
             nodeList.AssignContentToGrid(gridLog);
 
-            if (nodeList.tail.Data.verifyStatusCode > 0)
-                popUp(nodeList.tail.Data.verifyStatusCode);
+            VerifyStatusCode status = (VerifyStatusCode)nodeList.tail.Data.verifyStatusCode;
+
+            if (status > VerifyStatusCode.kSuccess)
+                popUp(status);
         }
 
         private void btnLists_Click(object sender, EventArgs e)
@@ -86,7 +89,7 @@ namespace Operator_Screen_App
             nodeList.AssignContentToGrid(gridLog);
         }
 
-        private void popUp(UInt16 code)
+        private void popUp(VerifyStatusCode code)
         {
             PopUp PopupScreen = new(code);
             PopupScreen.Show();
@@ -95,8 +98,8 @@ namespace Operator_Screen_App
         private void Display_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult result = MessageBox.Show("Exit?", "Confirmation", MessageBoxButtons.OKCancel);
-            
-            if(result == DialogResult.Cancel) e.Cancel = true;
+
+            if (result == DialogResult.Cancel) e.Cancel = true;
         }
     }
 }
