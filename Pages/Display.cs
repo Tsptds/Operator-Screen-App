@@ -13,13 +13,11 @@ namespace Operator_Screen_App
     public partial class Display : Form
     {
         NodeList nodeList;
-        Random random;
 
         public Display()
         {
             InitializeComponent();
             nodeList = new();
-            random = new Random();
         }
 
         public void btnSimulateOp_Click(object sender, EventArgs e)
@@ -29,8 +27,13 @@ namespace Operator_Screen_App
             string json = "";
             try
             {
-                //json1 = RequestLog.FetchJson();
-                json = Json_response.getString();
+                #if DEBUG
+                    MessageBox.Show("DEBUG");
+                    Json_response.getString();
+                #else
+                    MessageBox.Show("Release");
+                    json = RequestLog.FetchJson();
+                #endif
             }
             catch (Exception ex)
             {

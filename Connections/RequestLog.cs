@@ -32,7 +32,7 @@ namespace Operator_Screen_App.Connections
                                  "User-Agent: CustomClient/1.0\r\n" + // Some servers require User-Agent
                                  "Connection: close\r\n\r\n";
 
-                    byte[] requestBytes = Encoding.ASCII.GetBytes(request);
+                    byte[] requestBytes = Encoding.UTF8.GetBytes(request);
                     sslStream.Write(requestBytes, 0, requestBytes.Length);
                     sslStream.Flush();
                     sslStream.ReadTimeout = 5000;
@@ -48,7 +48,7 @@ namespace Operator_Screen_App.Connections
                         }
 
                         // Convert response to string
-                        string response = Encoding.ASCII.GetString(memoryStream.ToArray());
+                        string response = Encoding.UTF8.GetString(memoryStream.ToArray());
                         Console.WriteLine(response);
                         
                         // Find the header-body separator (\r\n\r\n)
