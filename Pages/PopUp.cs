@@ -38,6 +38,7 @@ namespace Operator_Screen_App.Pages
             {
                 tmrConfirm.Stop();
                 tmrAlert.Start();
+                barTimer.Visible = true;
                 MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
 
 
@@ -46,11 +47,14 @@ namespace Operator_Screen_App.Pages
 
                 parentForm.Visible = true;
                 this.Close();
-                Dispose();
+                this.Dispose();
+            } 
+            else
+            {
+                timeout -= 1;
+                lblTime.Text = timeout.ToString();
             }
-            timeout -= 1;
-            lblTime.Text = timeout.ToString();
-
+            barConfirm.Value = Math.Max(timeout, (UInt16)0);
         }
 
         private void PopUp_FormClosing(object sender, FormClosingEventArgs e)
@@ -68,6 +72,10 @@ namespace Operator_Screen_App.Pages
         {
             tmrConfirm.Stop();
             tmrAlert.Start();
+
+            barTimer.Value = messageDisplayTime;
+            barTimer.Visible = true;
+
             DialogResult result = MessageBox.Show("Identity Confirmed", "Success");
             if (result == DialogResult.OK)
             {
@@ -78,7 +86,7 @@ namespace Operator_Screen_App.Pages
 
                 parentForm.Visible = true;
                 this.Close();
-                Dispose();
+                this.Dispose();
             }
         }
 
@@ -89,12 +97,13 @@ namespace Operator_Screen_App.Pages
                 tmrAlert.Stop();
                 parentForm.Visible = true;
                 this.Close();
-                Dispose();
+                this.Dispose();
             }
             else
             {
                 messageDisplayTime -= 1;
             }
+            barTimer.Value = Math.Max(messageDisplayTime , (UInt16)0 );
         }
     }
 }

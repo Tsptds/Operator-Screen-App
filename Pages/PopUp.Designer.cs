@@ -36,6 +36,8 @@
             lblContext = new Label();
             lblConfirm = new Label();
             tmrAlert = new System.Windows.Forms.Timer(components);
+            barTimer = new ProgressBar();
+            barConfirm = new ProgressBar();
             SuspendLayout();
             // 
             // tmrConfirm
@@ -110,6 +112,28 @@
             tmrAlert.Interval = 1000;
             tmrAlert.Tick += tmrAlert_Tick;
             // 
+            // barTimer
+            // 
+            barTimer.Enabled = false;
+            barTimer.Location = new Point(12, 415);
+            barTimer.Maximum = 5;
+            barTimer.Name = "barTimer";
+            barTimer.Size = new Size(781, 29);
+            barTimer.Step = -1;
+            barTimer.TabIndex = 5;
+            barTimer.Value = 5;
+            barTimer.Visible = false;
+            // 
+            // barConfirm
+            // 
+            barConfirm.Location = new Point(200, 62);
+            barConfirm.Maximum = 30;
+            barConfirm.Name = "barConfirm";
+            barConfirm.Size = new Size(400, 29);
+            barConfirm.Step = -1;
+            barConfirm.TabIndex = 6;
+            barConfirm.Value = 30;
+            // 
             // PopUp
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -117,6 +141,8 @@
             AutoScroll = true;
             ClientSize = new Size(800, 450);
             ControlBox = false;
+            Controls.Add(barConfirm);
+            Controls.Add(barTimer);
             Controls.Add(lblConfirm);
             Controls.Add(lblContext);
             Controls.Add(lblAttention);
@@ -143,5 +169,7 @@
         private Label lblContext;
         private Label lblConfirm;
         private System.Windows.Forms.Timer tmrAlert;
+        private ProgressBar barTimer;
+        private ProgressBar barConfirm;
     }
 }
