@@ -31,7 +31,7 @@ namespace Operator_Screen_App
                 #if DEBUG
                     json = Json_response.getString();
                 #else
-                    json = await RequestLog.FetchJson();
+                    json = await RequestLog.FetchJsonGetAsync();
                 #endif
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ MessageBox.Show(json, "Stripped HTTP RESPONSE");
             VerifyStatusCode status = (VerifyStatusCode)nodeList.tail.Data.verifyStatusCode;
 
             if (status > VerifyStatusCode.kSuccess)
-                popUp(status);
+                popUp(status, nodeList);
 
             btnSimulateOp.Enabled = true;
             btnLists.Enabled = true;
@@ -100,10 +100,10 @@ MessageBox.Show(json, "Stripped HTTP RESPONSE");
             //nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
         }
 
-        private void popUp(VerifyStatusCode code)
+        private void popUp(VerifyStatusCode code, NodeList nodeList)
         {
             this.Visible = false;
-            PopUp PopupScreen = new(this, code);
+            PopUp PopupScreen = new(this, code, nodeList);
             PopupScreen.Show();
         }
 

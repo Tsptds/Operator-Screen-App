@@ -9,7 +9,9 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Operator_Screen_App.Connections;
 using Operator_Screen_App.Items.Log.Attributes;
+using Operator_Screen_App.Items.Node;
 
 namespace Operator_Screen_App.Pages
 {
@@ -18,16 +20,19 @@ namespace Operator_Screen_App.Pages
         private UInt16 timeout;
         private UInt16 messageDisplayTime;
         private VerifyStatusCode displayCode;
+        private NodeList nodeList;
         private Form parentForm;
-        public PopUp(Form parent, VerifyStatusCode statusCode)
+        
+        public PopUp(Form _parent, VerifyStatusCode _statusCode, NodeList _nodeList)
         {
-            timeout = 30;
+            timeout = 5;
             messageDisplayTime = 5;
-            displayCode = statusCode;
+            displayCode = _statusCode;
+            nodeList = _nodeList;
 
             InitializeComponent();
             lblContext.Text = $"Status: {(displayCode.context())}";
-            parentForm = parent;
+            parentForm = _parent;
             tmrConfirm.Start();
         }
 
@@ -68,20 +73,62 @@ namespace Operator_Screen_App.Pages
         //        MessageBox.Show("Please confirm your identity");
         //}
 
-        private void btnConfirm_Click(object sender, EventArgs e)
+        private async void btnConfirm_Click(object sender, EventArgs e)
         {
             tmrConfirm.Stop();
+            barConfirm.Visible = false;
             tmrAlert.Start();
 
             barTimer.Value = messageDisplayTime;
             barTimer.Visible = true;
 
-            DialogResult result = MessageBox.Show("Identity Confirmed", "Success");
-            if (result == DialogResult.OK)
+            //DialogResult result = MessageBox.Show("Identity Confirmed", "Success");
+            //if (result == DialogResult.OK)
             {
-                tmrAlert.Stop();
 
-                //TODO: Post to API with Log ID & Description
+                try
+                {
+                    var lastNode = nodeList.tail.Data;
+                    var payload = new
+                    {
+                        LogId = lastNode.logID.ToString(),
+                        Description = $"User Data Test"
+                    };
+
+                    string jsonResponse = await SendLog.SendJsonPostAsync(payload);
+
+                    if (jsonResponse != null)
+                    {
+
+                        // Find the header-body separator (\r\n\r\n)
+                        int idx1 = jsonResponse.IndexOf("\r\n");
+                        //MessageBox.Show($"{idx1}", "index header end");
+                        if (idx1 != -1)
+                        {
+                            jsonResponse = jsonResponse.Substring(idx1 + 2); // Extract everything after the headers
+
+                            
+
+                            int idx3 = jsonResponse.IndexOf("\r\n");
+                            //MessageBox.Show($"{idx3}", "index tail");
+                            if (idx3 != -1)
+                            {
+                                jsonResponse = jsonResponse.Substring(0, idx3);
+                            }
+                            
+                        }
+                        tmrAlert.Start();
+                        barTimer.Visible = true;
+                        MessageBox.Show($"Server Returned: {jsonResponse}", "Server Response");
+                    }
+                    else
+                        MessageBox.Show("Server Returned null Response");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
 
 
                 parentForm.Visible = true;

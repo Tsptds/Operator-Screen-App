@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Operator_Screen_App._ignore;
 
 namespace Operator_Screen_App.Connections
 {
-    public class RequestLog
+    public class SendLog
     {
         private const string host = ServerConfigs.host;
-        private const string Endpoint = ServerConfigs.Endpoint; 
+        private const string Endpoint = ServerConfigs.Endpoint;
         private const int port = ServerConfigs.port;
         private const int timeoutMs = ServerConfigs.timeoutMs;
-
-        public static async Task<string> FetchJsonGetAsync()
+        public static async Task<string> SendJsonPostAsync(object payload)
         {
             try
             {
@@ -35,21 +31,29 @@ namespace Operator_Screen_App.Connections
                         // Perform SSL handshake
                         await sslStream.AuthenticateAsClientAsync(host);
 
-                        // Send HTTP GET request with JSON response format
-                        string request = $"GET {Endpoint} HTTP/1.1\r\n" +
-                                 $"Host: {host}\r\n" +
-                                 "Accept: application/json\r\n" + // Request JSON format
-                                 "User-Agent: CustomClient/1.0\r\n" + // Some servers require User-Agent
-                                 "Connection: close\r\n\r\n";
+                        // Convert payload to JSON
+                        string jsonBody = System.Text.Json.JsonSerializer.Serialize(payload);
+                        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+
+                        // Construct HTTP POST request
+                        string request = $"POST {Endpoint} HTTP/1.1\r\n" +
+                                         $"Host: {host}\r\n" +
+                                         "Content-Type: application/json\r\n" +
+                                         $"Content-Length: {jsonBytes.Length}\r\n" +
+                                         "User-Agent: CustomClient/1.0\r\n" +
+                                         "Connection: close\r\n\r\n";
 
                         byte[] requestBytes = Encoding.UTF8.GetBytes(request);
+
+                        // Send headers and body
                         await sslStream.WriteAsync(requestBytes, 0, requestBytes.Length);
+                        await sslStream.WriteAsync(jsonBytes, 0, jsonBytes.Length);
                         await sslStream.FlushAsync();
 
-                        // Read response
+                        // Read response with timeout
                         using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        CancellationTokenSource cts = new CancellationTokenSource(timeoutMs);
+                        using (CancellationTokenSource cts = new CancellationTokenSource(timeoutMs))
+                        {
                             byte[] buffer = new byte[4096];
                             int bytesRead;
 
@@ -68,9 +72,6 @@ namespace Operator_Screen_App.Connections
                                 response = response.Substring(index + 4);
                             }
 
-#if DEBUG
-                    MessageBox.Show(response);
-#endif
                             return response;
                         }
                     }
@@ -86,5 +87,6 @@ namespace Operator_Screen_App.Connections
                 return null;
             }
         }
+
     }
 }
