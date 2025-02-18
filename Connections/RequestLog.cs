@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Operator_Screen_App.Connections
@@ -14,58 +16,72 @@ namespace Operator_Screen_App.Connections
         private const string host = "interview.ones.com.tr";
         private const string Endpoint = "/API/AccessLog"; 
         private const int port = 443;
+        private const int timeoutMs = 5000;
 
-        public static string FetchJson()
+        public static async Task<string> FetchJson()
         {
             try
             {
-                using (TcpClient client = new TcpClient(host, port))
-                using (SslStream sslStream = new SslStream(client.GetStream(), false))
+                using (TcpClient client = new TcpClient())
                 {
-                    // Perform the SSL handshake
-                    sslStream.AuthenticateAsClient(host);
+                    client.ReceiveTimeout = timeoutMs;
+                    client.SendTimeout = timeoutMs;
 
-                    // Send HTTP GET request with JSON response format
-                    string request = $"GET {Endpoint} HTTP/1.1\r\n" +
+                    await client.ConnectAsync(host, port);
+
+                    using (SslStream sslStream = new SslStream(client.GetStream(), false))
+                    {
+                        // Perform SSL handshake
+                        await sslStream.AuthenticateAsClientAsync(host);
+
+                        // Send HTTP GET request with JSON response format
+                        string request = $"GET {Endpoint} HTTP/1.1\r\n" +
                                  $"Host: {host}\r\n" +
                                  "Accept: application/json\r\n" + // Request JSON format
                                  "User-Agent: CustomClient/1.0\r\n" + // Some servers require User-Agent
                                  "Connection: close\r\n\r\n";
 
-                    byte[] requestBytes = Encoding.UTF8.GetBytes(request);
-                    sslStream.Write(requestBytes, 0, requestBytes.Length);
-                    sslStream.Flush();
-                    sslStream.ReadTimeout = 5000;
+                        byte[] requestBytes = Encoding.UTF8.GetBytes(request);
+                        await sslStream.WriteAsync(requestBytes, 0, requestBytes.Length);
+                        await sslStream.FlushAsync();
 
-                    // Read response
-                    using (MemoryStream memoryStream = new MemoryStream())
+                        // Read response
+                        using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = sslStream.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            memoryStream.Write(buffer, 0, bytesRead);
-                        }
+                        CancellationTokenSource cts = new CancellationTokenSource(timeoutMs);
+                            byte[] buffer = new byte[4096];
+                            int bytesRead;
 
-                        // Convert response to string
-                        string response = Encoding.UTF8.GetString(memoryStream.ToArray());
-                        Console.WriteLine(response);
-                        
-                        // Find the header-body separator (\r\n\r\n)
-                        int index = response.IndexOf("\r\n\r\n");
-                        if (index != -1)
-                        {
-                            response = response.Substring(index + 4); // Extract everything after the headers
-                        }
-                        MessageBox.Show(response);
+                            while ((bytesRead = await sslStream.ReadAsync(buffer, 0, buffer.Length, cts.Token)) > 0)
+                            {
+                                memoryStream.Write(buffer, 0, bytesRead);
+                            }
 
-                        return response;
+                            // Convert response to string
+                            string response = Encoding.UTF8.GetString(memoryStream.ToArray());
+
+                            // Extract JSON part from response (ignoring HTTP headers)
+                            int index = response.IndexOf("\r\n\r\n");
+                            if (index != -1)
+                            {
+                                response = response.Substring(index + 4);
+                            }
+
+#if DEBUG
+                    MessageBox.Show(response);
+#endif
+                            return response;
+                        }
                     }
                 }
             }
+            catch (OperationCanceledException)
+            {
+                throw new TimeoutException("Read operation timed out.");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}");
                 return null;
             }
         }

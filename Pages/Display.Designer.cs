@@ -67,87 +67,96 @@
             // 
             // gridLog
             // 
+            gridLog.AllowUserToAddRows = false;
+            gridLog.AllowUserToDeleteRows = false;
             gridLog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             gridLog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridLog.Columns.AddRange(new DataGridViewColumn[] { entryNo, logID, computerHash, ipAddress, userID, username, accessLocation, accessDirection, verifyStatusCode, additionalInfo, logTime });
+            gridLog.Cursor = Cursors.Cross;
+            gridLog.EditMode = DataGridViewEditMode.EditProgrammatically;
             gridLog.Location = new Point(12, 246);
             gridLog.Name = "gridLog";
+            gridLog.ReadOnly = true;
+            gridLog.RowHeadersVisible = false;
             gridLog.RowHeadersWidth = 51;
+            gridLog.ShowEditingIcon = false;
             gridLog.Size = new Size(1382, 234);
             gridLog.TabIndex = 3;
+            gridLog.TabStop = false;
             // 
             // entryNo
             // 
-            entryNo.HeaderText = "Entry No:";
+            entryNo.HeaderText = "Entry No";
             entryNo.MinimumWidth = 6;
             entryNo.Name = "entryNo";
+            entryNo.ReadOnly = true;
             // 
             // logID
             // 
-            logID.HeaderText = "logID";
+            logID.HeaderText = "Log ID";
             logID.MinimumWidth = 6;
             logID.Name = "logID";
             logID.ReadOnly = true;
             // 
             // computerHash
             // 
-            computerHash.HeaderText = "computerHash";
+            computerHash.HeaderText = "Computer Hash";
             computerHash.MinimumWidth = 6;
             computerHash.Name = "computerHash";
             computerHash.ReadOnly = true;
             // 
             // ipAddress
             // 
-            ipAddress.HeaderText = "ipAddress";
+            ipAddress.HeaderText = "IP Address";
             ipAddress.MinimumWidth = 6;
             ipAddress.Name = "ipAddress";
             ipAddress.ReadOnly = true;
             // 
             // userID
             // 
-            userID.HeaderText = "userID";
+            userID.HeaderText = "User ID";
             userID.MinimumWidth = 6;
             userID.Name = "userID";
             userID.ReadOnly = true;
             // 
             // username
             // 
-            username.HeaderText = "username";
+            username.HeaderText = "Username";
             username.MinimumWidth = 6;
             username.Name = "username";
             username.ReadOnly = true;
             // 
             // accessLocation
             // 
-            accessLocation.HeaderText = "accessLocation";
+            accessLocation.HeaderText = "Access Location";
             accessLocation.MinimumWidth = 6;
             accessLocation.Name = "accessLocation";
             accessLocation.ReadOnly = true;
             // 
             // accessDirection
             // 
-            accessDirection.HeaderText = "accessDirection";
+            accessDirection.HeaderText = "Access Direction";
             accessDirection.MinimumWidth = 6;
             accessDirection.Name = "accessDirection";
             accessDirection.ReadOnly = true;
             // 
             // verifyStatusCode
             // 
-            verifyStatusCode.HeaderText = "verifyStatusCode";
+            verifyStatusCode.HeaderText = "Verify Status Code";
             verifyStatusCode.MinimumWidth = 6;
             verifyStatusCode.Name = "verifyStatusCode";
             verifyStatusCode.ReadOnly = true;
             // 
             // additionalInfo
             // 
-            additionalInfo.HeaderText = "additionalInfo";
+            additionalInfo.HeaderText = "Additional Info";
             additionalInfo.MinimumWidth = 6;
             additionalInfo.Name = "additionalInfo";
             additionalInfo.ReadOnly = true;
             // 
             // logTime
             // 
-            logTime.HeaderText = "logTime";
+            logTime.HeaderText = "Log Time";
             logTime.MinimumWidth = 6;
             logTime.Name = "logTime";
             logTime.ReadOnly = true;

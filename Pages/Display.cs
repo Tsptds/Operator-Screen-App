@@ -20,19 +20,18 @@ namespace Operator_Screen_App
             nodeList = new();
         }
 
-        public void btnSimulateOp_Click(object sender, EventArgs e)
+        public async void btnSimulateOp_Click(object sender, EventArgs e)
         {
-            //System.Media.SystemSounds.Beep.Play();
-
+            System.Media.SystemSounds.Question.Play();
+            btnSimulateOp.Enabled = false;
+            btnLists.Enabled = false;
             string json = "";
             try
             {
                 #if DEBUG
-                    MessageBox.Show("DEBUG");
-                    Json_response.getString();
+                    json = Json_response.getString();
                 #else
-                    MessageBox.Show("Release");
-                    json = RequestLog.FetchJson();
+                    json = await RequestLog.FetchJson();
                 #endif
             }
             catch (Exception ex)
@@ -40,7 +39,12 @@ namespace Operator_Screen_App
                 MessageBox.Show(ex.ToString());
             }
 
-
+            if (json is null)
+            {
+                btnSimulateOp.Enabled=true;
+                btnLists.Enabled = true;
+                return;
+            }
 
 
             // Find the header-body separator (\r\n\r\n)
@@ -64,8 +68,9 @@ namespace Operator_Screen_App
                     }
                 }
             }
-            //MessageBox.Show(json, "Stripped HTTP RESPONSE");
-
+#if DEBUG
+MessageBox.Show(json, "Stripped HTTP RESPONSE");
+#endif
             try
             {
                 LogEntry? parsedData = JsonSerializer.Deserialize<LogEntry>(json);
@@ -84,12 +89,15 @@ namespace Operator_Screen_App
 
             if (status > VerifyStatusCode.kSuccess)
                 popUp(status);
+
+            btnSimulateOp.Enabled = true;
+            btnLists.Enabled = true;
         }
 
         private void btnLists_Click(object sender, EventArgs e)
         {
             nodeList.Print();
-            nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
+            //nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
         }
 
         private void popUp(VerifyStatusCode code)

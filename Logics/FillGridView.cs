@@ -18,18 +18,18 @@ namespace Operator_Screen_App.Logics
 
             // Ensure the grid has the appropriate columns
             grid.Columns.Clear();
-            grid.Columns.Add("Log No: ", "entryNo");
+            grid.Columns.Add("entryNo ", "Entry No");
 
-            grid.Columns.Add("logID", "logID");
-            grid.Columns.Add("computerHash", "computerHash");
-            grid.Columns.Add("ipAddress", "ipAddress");
-            grid.Columns.Add("userID", "userID");
-            grid.Columns.Add("username", "username");
-            grid.Columns.Add("accessLocation", "accessLocation");
-            grid.Columns.Add("accessDirection", "accessDirection");
-            grid.Columns.Add("verifyStatusCode", "verifyStatusCode");
-            grid.Columns.Add("additionalInfo", "additionalInfo");
-            grid.Columns.Add("logTime", "logTime");
+            grid.Columns.Add("logID", "Log ID");
+            grid.Columns.Add("computerHash", "Computer Hash");
+            grid.Columns.Add("ipAddress", "IP Address");
+            grid.Columns.Add("userID", "User ID");
+            grid.Columns.Add("username", "Username");
+            grid.Columns.Add("accessLocation", "Access Location");
+            grid.Columns.Add("accessDirection", "Access Direction");
+            grid.Columns.Add("verifyStatusCode", "Verify Status Code");
+            grid.Columns.Add("additionalInfo", "Additional Info");
+            grid.Columns.Add("logTime", "Log Time");
 
             // Iterate through the linked list and populate the grid
             Node current = tail;
