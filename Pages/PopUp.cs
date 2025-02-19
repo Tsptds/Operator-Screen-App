@@ -21,10 +21,10 @@ namespace Operator_Screen_App.Pages
         private UInt16 messageDisplayTimeNormal;
         private UInt16 messageDisplayTimeError;
         private VerifyStatusCode displayCode;
-        private NodeList nodeList;
+        private Node node;
         private Form parentForm;
         
-        public PopUp(Form _parent, VerifyStatusCode _statusCode, NodeList _nodeList)
+        public PopUp(Form _parent, VerifyStatusCode _statusCode, Node _node)
         {
 #if DEBUG
             timeout = 5;
@@ -34,11 +34,12 @@ namespace Operator_Screen_App.Pages
             messageDisplayTimeNormal = 5;
             messageDisplayTimeError = 15;
             displayCode = _statusCode;
-            nodeList = _nodeList;
+            node = _node;
             parentForm = _parent;
 
             InitializeComponent();
-            lblContext.Text = $"Status: {(displayCode.context())}";
+            lblStatus.Text = $"Status: {((VerifyStatusCode)node.Data.verifyStatusCode).context()}";
+            lblUsername.Text = $"User: {node.Data.username}";
             tmrConfirm.Start();
         }
 
@@ -90,10 +91,10 @@ namespace Operator_Screen_App.Pages
 
                 try
                 {
-                    var lastNode = nodeList.tail.Data;
+                    var nodeData = node.Data;
                     var payload = new
                     {
-                        LogID = lastNode.logID.ToString(),
+                        LogID = nodeData.logID.ToString(),
                         Description = $"User Data Test"
                     };
 

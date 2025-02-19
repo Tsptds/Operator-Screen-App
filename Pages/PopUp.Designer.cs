@@ -33,11 +33,12 @@
             lblTime = new Label();
             btnConfirm = new Button();
             lblAttention = new Label();
-            lblContext = new Label();
+            lblStatus = new Label();
             lblConfirm = new Label();
             tmrAlert = new System.Windows.Forms.Timer(components);
             barTimer = new ProgressBar();
             barConfirm = new ProgressBar();
+            lblUsername = new Label();
             SuspendLayout();
             // 
             // tmrConfirm
@@ -60,7 +61,7 @@
             // 
             // btnConfirm
             // 
-            btnConfirm.Location = new Point(239, 288);
+            btnConfirm.Location = new Point(250, 288);
             btnConfirm.Name = "btnConfirm";
             btnConfirm.Size = new Size(305, 121);
             btnConfirm.TabIndex = 1;
@@ -81,18 +82,20 @@
             lblAttention.Text = "ACTION REQUIRED";
             lblAttention.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lblContext
+            // lblStatus
             // 
-            lblContext.AutoSize = true;
-            lblContext.BackColor = Color.Gainsboro;
-            lblContext.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblContext.Location = new Point(200, 139);
-            lblContext.MinimumSize = new Size(400, 50);
-            lblContext.Name = "lblContext";
-            lblContext.Size = new Size(400, 50);
-            lblContext.TabIndex = 3;
-            lblContext.Text = "Status Code:";
-            lblContext.TextAlign = ContentAlignment.MiddleCenter;
+            lblStatus.AutoEllipsis = true;
+            lblStatus.AutoSize = true;
+            lblStatus.BackColor = Color.Gainsboro;
+            lblStatus.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblStatus.ForeColor = Color.Red;
+            lblStatus.Location = new Point(200, 94);
+            lblStatus.MinimumSize = new Size(400, 50);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(400, 50);
+            lblStatus.TabIndex = 3;
+            lblStatus.Text = "Status:";
+            lblStatus.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblConfirm
             // 
@@ -134,6 +137,21 @@
             barConfirm.TabIndex = 6;
             barConfirm.Value = 30;
             // 
+            // lblUsername
+            // 
+            lblUsername.AutoEllipsis = true;
+            lblUsername.AutoSize = true;
+            lblUsername.BackColor = Color.Gainsboro;
+            lblUsername.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblUsername.ForeColor = SystemColors.ControlText;
+            lblUsername.Location = new Point(200, 144);
+            lblUsername.MinimumSize = new Size(400, 50);
+            lblUsername.Name = "lblUsername";
+            lblUsername.Size = new Size(400, 50);
+            lblUsername.TabIndex = 7;
+            lblUsername.Text = "User:";
+            lblUsername.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // PopUp
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -141,10 +159,11 @@
             AutoScroll = true;
             ClientSize = new Size(800, 450);
             ControlBox = false;
+            Controls.Add(lblUsername);
             Controls.Add(barConfirm);
             Controls.Add(barTimer);
             Controls.Add(lblConfirm);
-            Controls.Add(lblContext);
+            Controls.Add(lblStatus);
             Controls.Add(lblAttention);
             Controls.Add(btnConfirm);
             Controls.Add(lblTime);
@@ -165,10 +184,11 @@
         private Label lblTime;
         private Button btnConfirm;
         private Label lblAttention;
-        private Label lblContext;
+        private Label lblStatus;
         private Label lblConfirm;
         private System.Windows.Forms.Timer tmrAlert;
         private ProgressBar barTimer;
         private ProgressBar barConfirm;
+        private Label lblUsername;
     }
 }

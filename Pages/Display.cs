@@ -1,5 +1,5 @@
 /*FOR OFFLINE TESTING, DEFINE FAKEHOST HERE, ELSE COMMENT IT OUT*/
-#define FAKEHOST
+//#define FAKEHOST
 
 using Operator_Screen_App.Connections;
 using Operator_Screen_App.Items.Log;
@@ -88,7 +88,7 @@ namespace Operator_Screen_App
             VerifyStatusCode status = (VerifyStatusCode)nodeList.tail.Data.verifyStatusCode;
 
             if (status > VerifyStatusCode.kSuccess)
-                popUp(status, nodeList);
+                popUp(status, nodeList.tail);
 
             btnSimulateOp.Enabled = true;
             btnLists.Enabled = true;
@@ -100,10 +100,10 @@ namespace Operator_Screen_App
             //nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
         }
 
-        private void popUp(VerifyStatusCode code, NodeList nodeList)
+        private void popUp(VerifyStatusCode _code, Node _tail)
         {
             this.Visible = false;
-            PopUp PopupScreen = new(this, code, nodeList);
+            PopUp PopupScreen = new(this, _code, _tail);
             PopupScreen.Show();
         }
 
