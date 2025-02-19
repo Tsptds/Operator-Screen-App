@@ -82,6 +82,7 @@ namespace Operator_Screen_App.Pages
 
         private async void btnConfirm_Click(object sender, EventArgs e)
         {
+            btnConfirm.Enabled = false;
             tmrConfirm.Stop();
             barConfirm.Visible = false;
 

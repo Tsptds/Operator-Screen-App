@@ -61,6 +61,9 @@ namespace Operator_Screen_App.Connections
                             // Convert response to string
                             string response = Encoding.UTF8.GetString(memoryStream.ToArray());
 
+#if DEBUG
+                            MessageBox.Show(response, "Unhandled Response");
+#endif
                             // Extract JSON part from response (ignoring HTTP headers)
                             int index = response.IndexOf("\r\n\r\n");
                             if (index != -1)
@@ -68,9 +71,6 @@ namespace Operator_Screen_App.Connections
                                 response = response.Substring(index + 4);
                             }
 
-#if DEBUG
-                    MessageBox.Show(response);
-#endif
                             return response;
                         }
                     }

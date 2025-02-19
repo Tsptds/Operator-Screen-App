@@ -15,6 +15,8 @@ namespace Operator_Screen_App
         {
             ApplicationConfiguration.Initialize();
             Application.Run(new Display());
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("HELLLOO");
 
             //TODO: Add Logs with NLog
         }

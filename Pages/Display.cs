@@ -21,6 +21,9 @@ namespace Operator_Screen_App
         {
             InitializeComponent();
             nodeList = new();
+#if FAKEHOST
+            MessageBox.Show("Local Json generator enabled, to use the actual API for JSON Fetching, undefine FAKEHOST inside Display", "ATTENTION");
+#endif
         }
 
         public async void btnSimulateOp_Click(object sender, EventArgs e)
@@ -31,11 +34,32 @@ namespace Operator_Screen_App
             string json = "";
             try
             {
-                #if FAKEHOST
-                    json = Json_response.getString();
-                #else
-                    json = await RequestLog.FetchJsonGetAsync();
-                #endif
+#if FAKEHOST
+                json = Json_response.getString();
+#else
+                json = await RequestLog.FetchJsonGetAsync();
+#endif
+                // Find the header-body separator (\r\n\r\n)
+                int idx1 = json.IndexOf("\r\n");
+                //MessageBox.Show($"{idx1}", "index header end");
+                if (idx1 != -1)
+                {
+                    json = json.Substring(idx1 + 2); // Extract everything after the headers
+
+                    int idx2 = json.IndexOf("{");
+                    //MessageBox.Show($"{idx2}", "index inner");
+                    if (idx2 != -1)
+                    {
+                        json = json.Substring(idx2);
+
+                        int idx3 = json.IndexOf("}");
+                        //MessageBox.Show($"{idx3}", "index tail");
+                        if (idx3 != -1)
+                        {
+                            json = json.Substring(0, idx3 + 1);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -47,27 +71,6 @@ namespace Operator_Screen_App
             }
 
 
-            // Find the header-body separator (\r\n\r\n)
-            int idx1 = json.IndexOf("\r\n");
-            //MessageBox.Show($"{idx1}", "index header end");
-            if (idx1 != -1)
-            {
-                json = json.Substring(idx1 + 2); // Extract everything after the headers
-
-                int idx2 = json.IndexOf("{");
-                //MessageBox.Show($"{idx2}", "index inner");
-                if (idx2 != -1)
-                {
-                    json = json.Substring(idx2);
-
-                    int idx3 = json.IndexOf("}");
-                    //MessageBox.Show($"{idx3}", "index tail");
-                    if (idx3 != -1)
-                    {
-                        json = json.Substring(0, idx3 + 1);
-                    }
-                }
-            }
 #if DEBUG
             MessageBox.Show(json, "Stripped HTTP RESPONSE");
 #endif
@@ -81,7 +84,7 @@ namespace Operator_Screen_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message);
             }
             nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
 
