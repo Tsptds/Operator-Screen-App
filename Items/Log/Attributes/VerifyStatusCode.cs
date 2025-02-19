@@ -6,11 +6,11 @@ namespace Operator_Screen_App.Items.Log.Attributes
     public enum VerifyStatusCode : UInt16
     {
         kSuccess = 0,
-        kNot_Found,
-        kNot_Enrolled,
-        kNot_Allowed_Bio_Type,
-        kNot_Verified,
-        kCard_Not_Supported
+        kNot_Found = 1,
+        kNot_Enrolled = 2,
+        kNot_Allowed_Bio_Type = 3,
+        kNot_Verified = 4,
+        kCard_Not_Supported = 5
     }
     public static class VerifyStatusCodeExtension
     {

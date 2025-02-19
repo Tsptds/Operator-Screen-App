@@ -154,7 +154,6 @@
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PopUp";
-            TopMost = true;
             FormClosing += PopUp_FormClosing;
             ResumeLayout(false);
             PerformLayout();

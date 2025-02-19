@@ -1,3 +1,6 @@
+/*FOR OFFLINE TESTING, DEFINE FAKEHOST HERE, ELSE COMMENT IT OUT*/
+#define FAKEHOST
+
 using Operator_Screen_App.Connections;
 using Operator_Screen_App.Items.Log;
 using Operator_Screen_App.Items.Node;
@@ -28,7 +31,7 @@ namespace Operator_Screen_App
             string json = "";
             try
             {
-                #if DEBUG
+                #if FAKEHOST
                     json = Json_response.getString();
                 #else
                     json = await RequestLog.FetchJsonGetAsync();
@@ -36,11 +39,8 @@ namespace Operator_Screen_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
-            }
-
-            if (json is null)
-            {
+                string msg = ex.Message;
+                MessageBox.Show(msg, "SERVER ERROR");
                 btnSimulateOp.Enabled=true;
                 btnLists.Enabled = true;
                 return;
@@ -69,7 +69,7 @@ namespace Operator_Screen_App
                 }
             }
 #if DEBUG
-MessageBox.Show(json, "Stripped HTTP RESPONSE");
+            MessageBox.Show(json, "Stripped HTTP RESPONSE");
 #endif
             try
             {

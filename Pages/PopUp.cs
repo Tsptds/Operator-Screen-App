@@ -18,21 +18,27 @@ namespace Operator_Screen_App.Pages
     public partial class PopUp : Form
     {
         private UInt16 timeout;
-        private UInt16 messageDisplayTime;
+        private UInt16 messageDisplayTimeNormal;
+        private UInt16 messageDisplayTimeError;
         private VerifyStatusCode displayCode;
         private NodeList nodeList;
         private Form parentForm;
         
         public PopUp(Form _parent, VerifyStatusCode _statusCode, NodeList _nodeList)
         {
+#if DEBUG
             timeout = 5;
-            messageDisplayTime = 5;
+#else
+            timeout = 30;
+#endif
+            messageDisplayTimeNormal = 5;
+            messageDisplayTimeError = 15;
             displayCode = _statusCode;
             nodeList = _nodeList;
+            parentForm = _parent;
 
             InitializeComponent();
             lblContext.Text = $"Status: {(displayCode.context())}";
-            parentForm = _parent;
             tmrConfirm.Start();
         }
 
@@ -77,10 +83,6 @@ namespace Operator_Screen_App.Pages
         {
             tmrConfirm.Stop();
             barConfirm.Visible = false;
-            tmrAlert.Start();
-
-            barTimer.Value = messageDisplayTime;
-            barTimer.Visible = true;
 
             //DialogResult result = MessageBox.Show("Identity Confirmed", "Success");
             //if (result == DialogResult.OK)
@@ -91,7 +93,7 @@ namespace Operator_Screen_App.Pages
                     var lastNode = nodeList.tail.Data;
                     var payload = new
                     {
-                        LogId = lastNode.logID.ToString(),
+                        LogID = lastNode.logID.ToString(),
                         Description = $"User Data Test"
                     };
 
@@ -117,17 +119,21 @@ namespace Operator_Screen_App.Pages
                             }
                             
                         }
+                        
                         tmrAlert.Start();
+                        barTimer.Value = messageDisplayTimeNormal;
                         barTimer.Visible = true;
                         MessageBox.Show($"Server Returned: {jsonResponse}", "Server Response");
                     }
-                    else
-                        MessageBox.Show("Server Returned null Response");
-
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    messageDisplayTimeNormal = messageDisplayTimeError;
+                    barTimer.Maximum = messageDisplayTimeNormal;
+                    barTimer.Value = messageDisplayTimeNormal;
+                    barTimer.Visible = true;
+                    tmrAlert.Start();
+                    MessageBox.Show(ex.Message, "SERVER ERROR");
                 }
 
 
@@ -139,7 +145,7 @@ namespace Operator_Screen_App.Pages
 
         private void tmrAlert_Tick(object sender, EventArgs e)
         {
-            if (messageDisplayTime < 1)
+            if (messageDisplayTimeNormal < 1)
             {
                 tmrAlert.Stop();
                 parentForm.Visible = true;
@@ -148,9 +154,9 @@ namespace Operator_Screen_App.Pages
             }
             else
             {
-                messageDisplayTime -= 1;
+                messageDisplayTimeNormal -= 1;
             }
-            barTimer.Value = Math.Max(messageDisplayTime , (UInt16)0 );
+            barTimer.Value = Math.Max(messageDisplayTimeNormal , (UInt16)0 );
         }
     }
 }

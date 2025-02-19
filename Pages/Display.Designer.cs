@@ -178,7 +178,6 @@
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Display";
-            TopMost = true;
             FormClosing += Display_FormClosing;
             ((System.ComponentModel.ISupportInitialize)gridLog).EndInit();
             ResumeLayout(false);
