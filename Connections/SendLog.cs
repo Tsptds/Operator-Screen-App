@@ -84,7 +84,6 @@ namespace Operator_Screen_App.Connections
                                     }
                                 }
 
-
                                 // Convert response to string
                                 string response = Encoding.UTF8.GetString(memoryStream.ToArray());
 
@@ -105,13 +104,6 @@ namespace Operator_Screen_App.Connections
             {
                 throw new TimeoutException("Operation timed out.");
             }
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error: {ex.Message}");
-            //    return null;
-            //}
         }
-
-
     }
 }

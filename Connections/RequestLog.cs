@@ -15,7 +15,7 @@ namespace Operator_Screen_App.Connections
     public class RequestLog
     {
         private const string host = ServerConfigs.host;
-        private const string Endpoint = ServerConfigs.Endpoint; 
+        private const string Endpoint = ServerConfigs.Endpoint;
         private const int port = ServerConfigs.port;
         private const int timeoutMs = ServerConfigs.timeoutMs;
 
@@ -48,8 +48,8 @@ namespace Operator_Screen_App.Connections
 
                         // Read response
                         using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        CancellationTokenSource cts = new CancellationTokenSource(timeoutMs);
+                        {
+                            CancellationTokenSource cts = new CancellationTokenSource(timeoutMs);
                             byte[] buffer = new byte[4096];
                             int bytesRead;
 
@@ -80,11 +80,6 @@ namespace Operator_Screen_App.Connections
             {
                 throw new TimeoutException("Operation timed out.");
             }
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error: {ex.Message}");
-            //    return null;
-            //}
         }
     }
 }

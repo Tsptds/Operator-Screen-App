@@ -17,7 +17,7 @@ namespace Operator_Screen_App.Pages
 {
     public partial class PopUp : Form
     {
-        private NLog.Logger logger;
+        private readonly NLog.Logger logger;
 
         private UInt16 timeout;
         private UInt16 messageDisplayTimeNormal;
@@ -25,17 +25,19 @@ namespace Operator_Screen_App.Pages
         private VerifyStatusCode displayCode;
         private Node node;
         private Form parentForm;
-        
+
         public PopUp(Form _parent, VerifyStatusCode _statusCode, Node _node)
         {
             logger = NLog.LogManager.GetCurrentClassLogger();
 #if DEBUG
-            timeout = 5;
+            timeout = 10;
+            messageDisplayTimeNormal = 3;
+            messageDisplayTimeError = 5;
 #else
             timeout = 30;
-#endif
             messageDisplayTimeNormal = 5;
             messageDisplayTimeError = 15;
+#endif
             displayCode = _statusCode;
             node = _node;
             parentForm = _parent;
@@ -48,26 +50,40 @@ namespace Operator_Screen_App.Pages
 
         private void tmrConfirm_Tick(object sender, EventArgs e)
         {
-
             if (timeout < 1)
             {
+
                 tmrConfirm.Stop();
-                tmrAlert.Start();
-                barTimer.Visible = true;
-
                 logger.Info("Manual Confirmation Not Done, Sending Mail to Supervisor");
-                MessageBox.Show("Manual Confirmation Not Done, Sending Mail to Supervisor", "Operator Hasn't Confirmed");
+                //MessageBox.Show("Manual Confirmation Not Done, Sending Mail to Supervisor", "Operator Hasn't Confirmed");
+
+                // Attempt to send mail
+                try
+                {
+                    
+                    Mail.Send();
+
+                    tmrAlert.Start();
+                    barTimer.Visible = true;
+
+                    logger.Info("Message Sent to Supervisor");
+                    MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
+                }
+                catch (Exception ex)
+                {
 
 
-                //TODO: Read SMTP settings from Settings.ini, Send Mail to supervisor
+                    tmrAlert.Start();
+                    barTimer.Visible = true;
 
-                logger.Info("Message Sent to Supervisor");
-                MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
+                    logger.Error(ex.Message);
+                    MessageBox.Show(ex.Message, "ERROR");
+                }                
 
                 parentForm.Visible = true;
                 this.Close();
                 this.Dispose();
-            } 
+            }
             else
             {
                 timeout -= 1;
@@ -78,14 +94,9 @@ namespace Operator_Screen_App.Pages
 
         private void PopUp_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Prevent this form from closing properly
             e.Cancel = true;
         }
-
-        //private void PopUp_Deactivate(object sender, EventArgs e)
-        //{
-        //    if (!shouldClose)
-        //        MessageBox.Show("Please confirm your identity");
-        //}
 
         private async void btnConfirm_Click(object sender, EventArgs e)
         {
@@ -93,67 +104,62 @@ namespace Operator_Screen_App.Pages
             tmrConfirm.Stop();
             barConfirm.Visible = false;
 
-            //DialogResult result = MessageBox.Show("Identity Confirmed", "Success");
-            //if (result == DialogResult.OK)
+            try
             {
-
-                try
+                var nodeData = node.Data;
+                var payload = new
                 {
-                    var nodeData = node.Data;
-                    var payload = new
-                    {
-                        LogID = nodeData.logID.ToString(),
-                        Description = $"User Data Test"
-                    };
-                    logger.Info("Manual confirm registered, attempting to post to server");
+                    LogID = nodeData.logID.ToString(),
+                    Description = $"User Data Test"
+                };
+                logger.Info("Manual confirm registered, attempting to post to server");
 
-                    string jsonResponse = await SendLog.SendJsonPostAsync(payload);
+                string jsonResponse = await SendLog.SendJsonPostAsync(payload);
 
-                    if (jsonResponse != null)
+                if (jsonResponse != null)
+                {
+                    // Find the header-body separator (\r\n\r\n)
+                    int idx1 = jsonResponse.IndexOf("\r\n");
+                    if (idx1 != -1)
                     {
-                        // Find the header-body separator (\r\n\r\n)
-                        int idx1 = jsonResponse.IndexOf("\r\n");
-                        //MessageBox.Show($"{idx1}", "index header end");
-                        if (idx1 != -1)
+                        // Extract everything after the headers
+                        jsonResponse = jsonResponse.Substring(idx1 + 2);
+
+                        // Delete trailing 0 as well
+                        int idx3 = jsonResponse.IndexOf("\r\n");
+                        if (idx3 != -1)
                         {
-                            jsonResponse = jsonResponse.Substring(idx1 + 2); // Extract everything after the headers
-
-                            
-
-                            int idx3 = jsonResponse.IndexOf("\r\n");
-                            //MessageBox.Show($"{idx3}", "index tail");
-                            if (idx3 != -1)
-                            {
-                                jsonResponse = jsonResponse.Substring(0, idx3);
-                            }
-                            
+                            jsonResponse = jsonResponse.Substring(0, idx3);
                         }
-                        
-                        tmrAlert.Start();
-                        barTimer.Value = messageDisplayTimeNormal;
-                        barTimer.Visible = true;
 
-                        logger.Info($"Server Returned: {jsonResponse}");
-                        MessageBox.Show($"Server Returned: {jsonResponse}", "Server Response");
                     }
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex);
 
-                    messageDisplayTimeNormal = messageDisplayTimeError;
-                    barTimer.Maximum = messageDisplayTimeNormal;
+                    tmrAlert.Start();
                     barTimer.Value = messageDisplayTimeNormal;
                     barTimer.Visible = true;
-                    tmrAlert.Start();
 
-                    MessageBox.Show(ex.Message, "SERVER ERROR");
+                    logger.Info($"Server Returned: {jsonResponse}");
+                    DialogResult skipped = MessageBox.Show($"Server Returned: {jsonResponse}", "Server Response", MessageBoxButtons.OK);
+
+                    // Temporary solution to spamming API
+                    if (skipped == DialogResult.OK)
+                    {
+                        // Wait at least 3 seconds, API rule. Skip to 0 if it's been 3 seconds already
+                        barTimer.Value = messageDisplayTimeNormal = (ushort)(barTimer.Value >= 3 ? 3 : 0);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
 
+                messageDisplayTimeNormal = messageDisplayTimeError;
+                barTimer.Maximum = messageDisplayTimeError;
+                barTimer.Value = messageDisplayTimeError;
+                barTimer.Visible = true;
+                tmrAlert.Start();
 
-                parentForm.Visible = true;
-                this.Close();
-                this.Dispose();
+                MessageBox.Show(ex.Message, "SERVER ERROR");
             }
         }
 
@@ -170,7 +176,7 @@ namespace Operator_Screen_App.Pages
             {
                 messageDisplayTimeNormal -= 1;
             }
-            barTimer.Value = Math.Max(messageDisplayTimeNormal , (UInt16)0 );
+            barTimer.Value = Math.Max(messageDisplayTimeNormal, (UInt16)0);
         }
     }
 }

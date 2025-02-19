@@ -16,7 +16,7 @@ namespace Operator_Screen_App.Logics
                 return;
             entryNo = listLength;
 
-            // Ensure the grid has the appropriate columns
+            // Refresh grid columns
             grid.Columns.Clear();
             grid.Columns.Add("entryNo ", "Entry No");
 
@@ -33,7 +33,7 @@ namespace Operator_Screen_App.Logics
 
             // Iterate through the linked list and populate the grid
             Node current = tail;
-            for(int i = listLength; i > 0; i--)
+            for (int i = listLength; i > 0; i--)
             {
                 grid.Rows.Add(
                     entryNo,

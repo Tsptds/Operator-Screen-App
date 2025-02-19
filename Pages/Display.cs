@@ -38,7 +38,7 @@ namespace Operator_Screen_App
             try
             {
 #if FAKEHOST
-                logger.info("Generating Debug json");
+                logger.Info("Generating Debug json");
                 json = Json_response.getString();
 #else
                 logger.Info("Awaiting response from server");
@@ -77,7 +77,7 @@ namespace Operator_Screen_App
                 logger.Error(msg);
                 MessageBox.Show(msg, "ERROR");
 
-                btnSimulateOp.Enabled=true;
+                btnSimulateOp.Enabled = true;
                 btnLists.Enabled = true;
                 return;
             }
