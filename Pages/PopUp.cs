@@ -17,6 +17,8 @@ namespace Operator_Screen_App.Pages
 {
     public partial class PopUp : Form
     {
+        private NLog.Logger logger;
+
         private UInt16 timeout;
         private UInt16 messageDisplayTimeNormal;
         private UInt16 messageDisplayTimeError;
@@ -26,6 +28,7 @@ namespace Operator_Screen_App.Pages
         
         public PopUp(Form _parent, VerifyStatusCode _statusCode, Node _node)
         {
+            logger = NLog.LogManager.GetCurrentClassLogger();
 #if DEBUG
             timeout = 5;
 #else
@@ -51,11 +54,15 @@ namespace Operator_Screen_App.Pages
                 tmrConfirm.Stop();
                 tmrAlert.Start();
                 barTimer.Visible = true;
-                MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
+
+                logger.Info("Manual Confirmation Not Done, Sending Mail to Supervisor");
+                MessageBox.Show("Manual Confirmation Not Done, Sending Mail to Supervisor", "Operator Hasn't Confirmed");
 
 
                 //TODO: Read SMTP settings from Settings.ini, Send Mail to supervisor
 
+                logger.Info("Message Sent to Supervisor");
+                MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
 
                 parentForm.Visible = true;
                 this.Close();
@@ -98,12 +105,12 @@ namespace Operator_Screen_App.Pages
                         LogID = nodeData.logID.ToString(),
                         Description = $"User Data Test"
                     };
+                    logger.Info("Manual confirm registered, attempting to post to server");
 
                     string jsonResponse = await SendLog.SendJsonPostAsync(payload);
 
                     if (jsonResponse != null)
                     {
-
                         // Find the header-body separator (\r\n\r\n)
                         int idx1 = jsonResponse.IndexOf("\r\n");
                         //MessageBox.Show($"{idx1}", "index header end");
@@ -125,16 +132,21 @@ namespace Operator_Screen_App.Pages
                         tmrAlert.Start();
                         barTimer.Value = messageDisplayTimeNormal;
                         barTimer.Visible = true;
+
+                        logger.Info($"Server Returned: {jsonResponse}");
                         MessageBox.Show($"Server Returned: {jsonResponse}", "Server Response");
                     }
                 }
                 catch (Exception ex)
                 {
+                    logger.Error(ex);
+
                     messageDisplayTimeNormal = messageDisplayTimeError;
                     barTimer.Maximum = messageDisplayTimeNormal;
                     barTimer.Value = messageDisplayTimeNormal;
                     barTimer.Visible = true;
                     tmrAlert.Start();
+
                     MessageBox.Show(ex.Message, "SERVER ERROR");
                 }
 

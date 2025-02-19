@@ -16,13 +16,16 @@ namespace Operator_Screen_App
     public partial class Display : Form
     {
         NodeList nodeList;
-
+        NLog.Logger logger;
         public Display()
         {
             InitializeComponent();
+            logger = NLog.LogManager.GetCurrentClassLogger();
             nodeList = new();
+
 #if FAKEHOST
-            MessageBox.Show("Local Json generator enabled, to use the actual API for JSON Fetching, undefine FAKEHOST inside Display", "ATTENTION");
+            logger.Info("**Local Json generator enabled\nTo use the actual API for JSON Fetching\nundefine FAKEHOST inside Display**");
+            MessageBox.Show("Local Json generator enabled\nTo use the actual API for JSON Fetching\nundefine FAKEHOST inside Display", "ATTENTION");
 #endif
         }
 
@@ -35,28 +38,35 @@ namespace Operator_Screen_App
             try
             {
 #if FAKEHOST
+                logger.info("Generating Debug json");
                 json = Json_response.getString();
 #else
+                logger.Info("Awaiting response from server");
                 json = await RequestLog.FetchJsonGetAsync();
 #endif
-                // Find the header-body separator (\r\n\r\n)
-                int idx1 = json.IndexOf("\r\n");
-                //MessageBox.Show($"{idx1}", "index header end");
-                if (idx1 != -1)
+                if (json != null)
                 {
-                    json = json.Substring(idx1 + 2); // Extract everything after the headers
+                    logger.Info("Retrieved not-null response, parsing json body");
 
-                    int idx2 = json.IndexOf("{");
-                    //MessageBox.Show($"{idx2}", "index inner");
-                    if (idx2 != -1)
+                    // Find the header-body separator (\r\n\r\n)
+                    int idx1 = json.IndexOf("\r\n");
+                    //MessageBox.Show($"{idx1}", "index header end");
+                    if (idx1 != -1)
                     {
-                        json = json.Substring(idx2);
+                        json = json.Substring(idx1 + 2); // Extract everything after the headers
 
-                        int idx3 = json.IndexOf("}");
-                        //MessageBox.Show($"{idx3}", "index tail");
-                        if (idx3 != -1)
+                        int idx2 = json.IndexOf("{");
+                        //MessageBox.Show($"{idx2}", "index inner");
+                        if (idx2 != -1)
                         {
-                            json = json.Substring(0, idx3 + 1);
+                            json = json.Substring(idx2);
+
+                            int idx3 = json.IndexOf("}");
+                            //MessageBox.Show($"{idx3}", "index tail");
+                            if (idx3 != -1)
+                            {
+                                json = json.Substring(0, idx3 + 1);
+                            }
                         }
                     }
                 }
@@ -64,7 +74,9 @@ namespace Operator_Screen_App
             catch (Exception ex)
             {
                 string msg = ex.Message;
-                MessageBox.Show(msg, "SERVER ERROR");
+                logger.Error(msg);
+                MessageBox.Show(msg, "ERROR");
+
                 btnSimulateOp.Enabled=true;
                 btnLists.Enabled = true;
                 return;
@@ -72,6 +84,7 @@ namespace Operator_Screen_App
 
 
 #if DEBUG
+            logger.Info("Stripped HTTP RESPONSE\n{0}", json);
             MessageBox.Show(json, "Stripped HTTP RESPONSE");
 #endif
             try
@@ -79,11 +92,13 @@ namespace Operator_Screen_App
                 LogEntry? parsedData = JsonSerializer.Deserialize<LogEntry>(json);
                 if (parsedData != null)
                 {
+                    logger.Info("Json successfully parsed, appending to list");
                     nodeList.Append(parsedData);
                 }
             }
             catch (Exception ex)
             {
+                logger.Error(ex.Message);
                 MessageBox.Show(ex.Message);
             }
             nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
@@ -91,7 +106,9 @@ namespace Operator_Screen_App
             VerifyStatusCode status = (VerifyStatusCode)nodeList.tail.Data.verifyStatusCode;
 
             if (status > VerifyStatusCode.kSuccess)
+            {
                 popUp(status, nodeList.tail);
+            }
 
             btnSimulateOp.Enabled = true;
             btnLists.Enabled = true;
@@ -105,6 +122,7 @@ namespace Operator_Screen_App
 
         private void popUp(VerifyStatusCode _code, Node _tail)
         {
+            logger.Info("Status code is invalid, Showing Manual Confirmation Window");
             this.Visible = false;
             PopUp PopupScreen = new(this, _code, _tail);
             PopupScreen.Show();

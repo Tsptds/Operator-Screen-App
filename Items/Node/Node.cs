@@ -14,7 +14,11 @@ namespace Operator_Screen_App.Items.Node
         public Node? Next { get; set; }
         public Node? Prev {  get; set; }
 
-        public Node(LogEntry log) { 
+        public Node(LogEntry log)
+        {
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Constructing new node");
+
             Data = log;
             Next = null;
             Prev = null;
@@ -23,6 +27,8 @@ namespace Operator_Screen_App.Items.Node
 
     public class NodeList
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public Node? head { get; set; }
         public Node? tail { get; set; }
         public int listLength = 0;
@@ -45,6 +51,8 @@ namespace Operator_Screen_App.Items.Node
 
         public void Print()
         {
+            logger.Info("Displaying All Entries");
+
             Node? current = head;
             var result = DialogResult.OK;
             while (current != null && result == DialogResult.OK)
@@ -70,6 +78,7 @@ namespace Operator_Screen_App.Items.Node
         // Takes the grid object and assigns the cols of LogEntry
         public void AssignContentToGrid(int listLength, DataGridView grid)
         {
+            logger.Info("Refreshing Grid");
             FillGridView.FillGrid(grid, tail, listLength);
         }
     }

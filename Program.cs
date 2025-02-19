@@ -7,6 +7,7 @@ namespace Operator_Screen_App
 {
     internal static class Program
     {
+        private static readonly string versionString = "1.0.0";
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -14,11 +15,13 @@ namespace Operator_Screen_App
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new Display());
-            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("HELLLOO");
 
-            //TODO: Add Logs with NLog
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
+            logger.Info("Operator Screen App v{0}", versionString);
+            logger.Info("App Initialized");
+
+            Application.Run(new Display());
         }
     }
 }
