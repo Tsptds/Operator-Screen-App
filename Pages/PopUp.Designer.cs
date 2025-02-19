@@ -169,7 +169,6 @@
             Controls.Add(lblTime);
             MinimizeBox = false;
             Name = "PopUp";
-            ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PopUp";

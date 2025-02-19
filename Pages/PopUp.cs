@@ -52,7 +52,6 @@ namespace Operator_Screen_App.Pages
         {
             if (timeout < 1)
             {
-
                 tmrConfirm.Stop();
                 logger.Info("Manual Confirmation Not Done, Sending Mail to Supervisor");
                 //MessageBox.Show("Manual Confirmation Not Done, Sending Mail to Supervisor", "Operator Hasn't Confirmed");

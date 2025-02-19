@@ -103,6 +103,7 @@ namespace Operator_Screen_App
             }
             nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
 
+            // Alert Operator if status isn't valid
             VerifyStatusCode status = (VerifyStatusCode)nodeList.tail.Data.verifyStatusCode;
 
             if (status > VerifyStatusCode.kSuccess)
