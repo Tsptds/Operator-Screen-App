@@ -1,8 +1,3 @@
-using System.Text.Json;
-using Operator_Screen_App.Connections;
-using Operator_Screen_App.Items.Log;
-using Operator_Screen_App.Items.Node;
-
 namespace Operator_Screen_App
 {
     internal static class Program

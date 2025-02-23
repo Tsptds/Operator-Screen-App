@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Operator_Screen_App._ignore;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Operator_Screen_App.Items.Node;
 using Operator_Screen_App.Items.Log.Attributes;
 
@@ -24,6 +16,7 @@ namespace Operator_Screen_App.Connections.Mail
 
             if (!File.Exists(iniFilePath))
             {
+                logger.Error("INI file not found");
                 throw new Exception("INI file not found!");
             }
 
@@ -34,28 +27,28 @@ namespace Operator_Screen_App.Connections.Mail
             string useSSL = Utility.ReadIniValue(iniFilePath, "SMTP", "UseSSL");
 
             string mailReceiver = Utility.ReadIniValue(iniFilePath, "MAIL", "MailTarget");
-            string mailHeader = "Operator Screen App: Invalid Entry Detected";
+            string mailHeader = "Operator Screen App: Unconfirmed Invalid Entry Detected";
 
             if (!int.TryParse(smtpPort, out int port))
             {
-                throw new Exception("Invalid SMTP Port in INI file.");
+                logger.Error("Invalid SMTP Port in INI file");
+                throw new Exception("Invalid SMTP Port in INI file");
             }
 #if DEBUG
             MessageBox.Show($"Port:{smtpPort}\n" +
-                $"User: {smtpUser}\n" +
                 $"Server: {smtpServer}");
 #endif
 
             bool enableSSL = useSSL.ToLower() == "true";
-
+            logger.Info("Constructing Mail");
             try
             {
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress(smtpUser),
                     Subject = mailHeader,
-                    Body = FormatMail(_logEntry), // This should return an HTML string
-                    IsBodyHtml = true // Important: Ensures Outlook renders it as HTML
+                    Body = FormatMailHTML(_logEntry), // This should return an HTML string
+                    IsBodyHtml = true // Ensure Mail renders it as HTML
                 };
 
                 mailMessage.To.Add(mailReceiver);
@@ -78,7 +71,7 @@ namespace Operator_Screen_App.Connections.Mail
             }
         }
 
-        private static string FormatMail(Node _logEntry)
+        private static string FormatMailHTML(Node _logEntry)
         {
             try
             {
@@ -95,9 +88,9 @@ namespace Operator_Screen_App.Connections.Mail
         <tr><td><strong>IP Address</strong></td><td>" + data.ipAddress + @"</td></tr>
         <tr><td><strong>Access Location</strong></td><td>" + data.accessLocation + @"</td></tr>
         <tr><td><strong>Access Direction</strong></td><td>" + data.accessDirection + " - " + ((AccessDirection)data.accessDirection).Format() + @"</td></tr>
-        <tr><td><strong>Status Code</strong></td><td>" + data.verifyStatusCode + " - " + ((VerifyStatusCode)data.verifyStatusCode).Context() + @"</td></tr>
+        <tr><td><strong>Status Code</strong></td><td>" + data.verifyStatusCode + " - " + ((VerifyStatusCode)data.verifyStatusCode).Format() + @"</td></tr>
         <tr><td><strong>Additional Info</strong></td><td>" + data.additionalInfo + @"</td></tr>
-        <tr><td><strong>Log Time</strong></td><td>" + data.logTime + @"</td></tr>
+        <tr><td><strong>Log Time</strong></td><td>" + data.logTime.Replace("T", " / ") + @"</td></tr>
     </table>
 </body>
 </html>";

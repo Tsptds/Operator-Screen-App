@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Operator_Screen_App.Logics;
-
-namespace Operator_Screen_App.Items.Log.Attributes
+﻿namespace Operator_Screen_App.Items.Log.Attributes
 {
     public enum VerifyStatusCode : UInt16
     {
@@ -11,17 +8,5 @@ namespace Operator_Screen_App.Items.Log.Attributes
         kNot_Allowed_Bio_Typ,
         kNot_Verified,
         kCard_Not_Supported
-    }
-    public static class VerifyStatusCodeExtension
-    {
-        //public static UInt16 val<T>(this T num) where T: Enum
-        //{
-        //    return Convert.ToUInt16(num);
-        //}
-
-        public static string Context<T>(this T num) where T : Enum
-        {
-            return num.ToString().Replace("_", " ").Substring(1);
-        }
     }
 }

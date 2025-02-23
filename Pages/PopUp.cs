@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Operator_Screen_App.Connections.API;
+﻿using Operator_Screen_App.Connections.API;
 using Operator_Screen_App.Connections.Mail;
 using Operator_Screen_App.Items.Log.Attributes;
 using Operator_Screen_App.Items.Node;
@@ -44,7 +33,7 @@ namespace Operator_Screen_App.Pages
             parentForm = _parent;
 
             InitializeComponent();
-            lblStatus.Text = $"Status: {((VerifyStatusCode)node.Data.verifyStatusCode).Context()}";
+            lblStatus.Text = $"Status: {((VerifyStatusCode)node.Data.verifyStatusCode).Format()}";
             lblUsername.Text = $"User: {node.Data.username}";
             tmrConfirm.Start();
         }
@@ -142,7 +131,7 @@ namespace Operator_Screen_App.Pages
                     // Temporary solution to spamming API
                     if (skipped == DialogResult.OK)
                     {
-                        // Wait at least 3 seconds, API rule. Skip to 0 if it'Format been 3 seconds already
+                        // Wait at least 3 seconds, API rule. Skip to 0 if it's been 3 seconds already
                         barTimer.Value = messageDisplayTimeNormal = (ushort)(barTimer.Value >= 3 ? 3 : 0);
                     }
                 }

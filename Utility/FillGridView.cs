@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Operator_Screen_App.Items.Node;
+﻿using Operator_Screen_App.Items.Node;
 
 namespace Operator_Screen_App.Logics
 {
