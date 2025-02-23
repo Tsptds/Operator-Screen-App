@@ -99,7 +99,7 @@ namespace Operator_Screen_App.Pages
                     Description = Post.FormatDescription(nodeData)
                 };
 #if DEBUG
-                MessageBox.Show(Post.FormatDescription(nodeData));
+                MessageBox.Show(nodeData.logID.ToString() + "\n" + Post.FormatDescription(nodeData), "POST body preview");
 #endif
                 logger.Info("Manual confirm registered, attempting to post to server");
 

@@ -16,6 +16,7 @@ namespace Operator_Screen_App
             {
                 logger.Error("Settings.ini was not found, app terminated");
                 MessageBox.Show("Settings.ini file not found, APP Will Not Start");
+                return;
             }
             else
             {
