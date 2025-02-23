@@ -44,7 +44,7 @@ namespace Operator_Screen_App.Pages
             parentForm = _parent;
 
             InitializeComponent();
-            lblStatus.Text = $"Status: {((VerifyStatusCode)node.Data.verifyStatusCode).context()}";
+            lblStatus.Text = $"Status: {((VerifyStatusCode)node.Data.verifyStatusCode).Context()}";
             lblUsername.Text = $"User: {node.Data.username}";
             tmrConfirm.Start();
         }
@@ -61,7 +61,7 @@ namespace Operator_Screen_App.Pages
                 try
                 {
                     btnConfirm.Enabled = false;
-                    Mail.Send();
+                    Mail.Send(node);
 
                     tmrAlert.Start();
                     barTimer.Visible = true;
@@ -142,7 +142,7 @@ namespace Operator_Screen_App.Pages
                     // Temporary solution to spamming API
                     if (skipped == DialogResult.OK)
                     {
-                        // Wait at least 3 seconds, API rule. Skip to 0 if it's been 3 seconds already
+                        // Wait at least 3 seconds, API rule. Skip to 0 if it'Format been 3 seconds already
                         barTimer.Value = messageDisplayTimeNormal = (ushort)(barTimer.Value >= 3 ? 3 : 0);
                     }
                 }
@@ -157,7 +157,14 @@ namespace Operator_Screen_App.Pages
                 barTimer.Visible = true;
                 tmrAlert.Start();
 
-                MessageBox.Show(ex.Message, "SERVER ERROR");
+                DialogResult skipped = MessageBox.Show(ex.Message, "SERVER ERROR", MessageBoxButtons.OK);
+
+                // Skip early
+                if (skipped == DialogResult.OK)
+                {
+                    // Set 0, since there was an error anyway
+                    barTimer.Value = messageDisplayTimeNormal = (ushort)0;
+                }
             }
         }
 

@@ -65,7 +65,7 @@
             btnConfirm.Name = "btnConfirm";
             btnConfirm.Size = new Size(305, 121);
             btnConfirm.TabIndex = 1;
-            btnConfirm.Text = "Confirm Your Identity";
+            btnConfirm.Text = "Confirm This Entry";
             btnConfirm.UseVisualStyleBackColor = true;
             btnConfirm.Click += btnConfirm_Click;
             // 

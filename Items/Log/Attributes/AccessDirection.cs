@@ -12,7 +12,7 @@
         //    return Convert.ToUInt16(num);
         //}
 
-        public static string dir<T>(this T num) where T : Enum
+        public static string Format<T>(this T num) where T : Enum
         {
             return num.ToString().Replace("_", " ").Substring(1);
         }

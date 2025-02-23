@@ -11,31 +11,47 @@ namespace Operator_Screen_App.Connections.API
 {
     public class SendLog
     {
-        private const string host = ServerConfigs.host;
-        private const string Endpoint = ServerConfigs.Endpoint;
-        private const int port = ServerConfigs.port;
-        private const int timeoutMs = ServerConfigs.clientRequestCancelTimeout;
         public static async Task<string> SendJsonPostAsync(object payload)
         {
+            const string iniFilePath = ".\\Settings.ini";
+            if (!File.Exists(iniFilePath))
+            {
+                throw new Exception("INI file not found!");
+            }
+
+            string Host = Utility.ReadIniValue(iniFilePath, "API", "Host");
+            string Endpoint = Utility.ReadIniValue(iniFilePath, "API", "Endpoint");
+            string Port = Utility.ReadIniValue(iniFilePath, "API", "Port");
+            string Timeout = Utility.ReadIniValue(iniFilePath, "API", "Timeout");
+
+            if (!int.TryParse(Port, out int ParsedPort))
+            {
+                throw new Exception("Invalid SMTP Port in INI file.");
+            }
+            if (!int.TryParse(Timeout, out int ParsedTimeout))
+            {
+                throw new Exception("Invalid SMTP Timeout in INI file");
+            }
+
             try
             {
                 using (TcpClient client = new TcpClient())
                 {
-                    client.ReceiveTimeout = timeoutMs;
-                    client.SendTimeout = timeoutMs;
+                    client.ReceiveTimeout = ParsedTimeout;
+                    client.SendTimeout = ParsedTimeout;
 
-                    using (var cts = new CancellationTokenSource(timeoutMs))
+                    using (var cts = new CancellationTokenSource(ParsedTimeout))
                     {
                         // Timeout enforced connect
-                        var connectTask = client.ConnectAsync(host, port);
-                        if (await Task.WhenAny(connectTask, Task.Delay(timeoutMs, cts.Token)) != connectTask)
+                        var connectTask = client.ConnectAsync(Host, ParsedPort);
+                        if (await Task.WhenAny(connectTask, Task.Delay(ParsedTimeout, cts.Token)) != connectTask)
                             throw new TimeoutException("Connection timed out.");
 
                         using (SslStream sslStream = new SslStream(client.GetStream(), false))
                         {
                             // Perform SSL handshake with timeout
-                            var authTask = sslStream.AuthenticateAsClientAsync(host);
-                            if (await Task.WhenAny(authTask, Task.Delay(timeoutMs, cts.Token)) != authTask)
+                            var authTask = sslStream.AuthenticateAsClientAsync(Host);
+                            if (await Task.WhenAny(authTask, Task.Delay(ParsedTimeout, cts.Token)) != authTask)
                                 throw new TimeoutException("SSL handshake timed out.");
 
                             await authTask; // Ensure it completes
@@ -46,7 +62,7 @@ namespace Operator_Screen_App.Connections.API
 
                             // Construct HTTP POST request
                             string request = $"POST {Endpoint} HTTP/1.1\r\n" +
-                                             $"Host: {host}\r\n" +
+                                             $"Host: {Host}\r\n" +
                                              "Content-Type: application/json\r\n" +
                                              $"Content-Length: {jsonBytes.Length}\r\n" +
                                              "User-Agent: CustomClient/1.0\r\n" +
@@ -68,7 +84,7 @@ namespace Operator_Screen_App.Connections.API
                                 while (true)
                                 {
                                     var readTask = sslStream.ReadAsync(buffer, 0, buffer.Length, cts.Token);
-                                    var completedTask = await Task.WhenAny(readTask, Task.Delay(timeoutMs, cts.Token));
+                                    var completedTask = await Task.WhenAny(readTask, Task.Delay(ParsedTimeout, cts.Token));
 
                                     if (completedTask == readTask) // Read task completed
                                     {

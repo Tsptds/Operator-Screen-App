@@ -14,18 +14,17 @@ namespace Operator_Screen_App
         [STAThread]
         static void Main()
         {
-            string iniFilePath = ".\\Connections\\Mail\\Settings.ini";
+            string iniFilePath = ".\\Settings.ini";
+            NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
             if (!File.Exists(iniFilePath))
             {
+                logger.Error("Settings.ini was not found, app terminated");
                 MessageBox.Show("Settings.ini file not found, APP Will Not Start");
             }
             else
             {
-
                 ApplicationConfiguration.Initialize();
-
-                NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
                 logger.Info("Operator Screen App v{0}", versionString);
                 logger.Info("App Initialized");

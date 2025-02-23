@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Connections\Mail\Settings.ini">
+    <None Update="Settings.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="nLog.config">

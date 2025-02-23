@@ -73,9 +73,8 @@ namespace Operator_Screen_App
             }
             catch (Exception ex)
             {
-                string msg = ex.Message;
-                logger.Error(msg);
-                MessageBox.Show(msg, "ERROR");
+                logger.Error(ex);
+                MessageBox.Show(ex.Message, "ERROR");
 
                 btnSimulateOp.Enabled = true;
                 btnLists.Enabled = true;
