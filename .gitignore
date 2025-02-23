@@ -2,5 +2,4 @@ bin/
 .vs/
 obj/
 *.http
-*.ini
 _ignore

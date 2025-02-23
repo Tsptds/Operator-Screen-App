@@ -44,7 +44,6 @@ namespace Operator_Screen_App.Pages
             {
                 tmrConfirm.Stop();
                 logger.Info("Manual Confirmation Not Done, Sending Mail to Supervisor");
-                //MessageBox.Show("Manual Confirmation Not Done, Sending Mail to Supervisor", "Operator Hasn't Confirmed");
 
                 // Attempt to send mail
                 try
@@ -97,8 +96,11 @@ namespace Operator_Screen_App.Pages
                 var payload = new
                 {
                     LogID = nodeData.logID.ToString(),
-                    Description = $"User Data Test"
+                    Description = Post.FormatDescription(nodeData)
                 };
+#if DEBUG
+                MessageBox.Show(Post.FormatDescription(nodeData));
+#endif
                 logger.Info("Manual confirm registered, attempting to post to server");
 
                 string jsonResponse = await SendLog.SendJsonPostAsync(payload);
