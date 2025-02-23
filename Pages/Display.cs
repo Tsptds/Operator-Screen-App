@@ -114,7 +114,6 @@ namespace Operator_Screen_App
         private void btnLists_Click(object sender, EventArgs e)
         {
             nodeList.Print();
-            //nodeList.AssignContentToGrid(nodeList.listLength, gridLog);
         }
 
         private void popUp(VerifyStatusCode _code, Node _tail)
