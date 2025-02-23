@@ -33,7 +33,7 @@ namespace Operator_Screen_App.Pages
             parentForm = _parent;
 
             InitializeComponent();
-            lblStatus.Text = $"Status: {((VerifyStatusCode)node.Data.verifyStatusCode).Format()}";
+            lblStatus.Text = $"Status: {((VerifyStatusCode)displayCode).Format()}";
             lblUsername.Text = $"User: {node.Data.username}";
             tmrConfirm.Start();
         }
