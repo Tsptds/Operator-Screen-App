@@ -1,7 +1,6 @@
 /*FOR OFFLINE TESTING, DEFINE FAKEHOST HERE, ELSE COMMENT IT OUT*/
 //#define FAKEHOST
 
-using Operator_Screen_App.Connections;
 using Operator_Screen_App.Items.Log;
 using Operator_Screen_App.Items.Node;
 using System.IO;
@@ -10,6 +9,7 @@ using System.Text.Json;
 using Operator_Screen_App._ignore;
 using Operator_Screen_App.Pages;
 using Operator_Screen_App.Items.Log.Attributes;
+using Operator_Screen_App.Connections.API;
 
 namespace Operator_Screen_App
 {

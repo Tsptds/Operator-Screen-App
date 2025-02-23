@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Operator_Screen_App._ignore;
 
-namespace Operator_Screen_App.Connections
+namespace Operator_Screen_App.Connections.API
 {
     public class SendLog
     {
         private const string host = ServerConfigs.host;
         private const string Endpoint = ServerConfigs.Endpoint;
         private const int port = ServerConfigs.port;
-        private const int timeoutMs = ServerConfigs.timeoutMs;
+        private const int timeoutMs = ServerConfigs.clientRequestCancelTimeout;
         public static async Task<string> SendJsonPostAsync(object payload)
         {
             try

@@ -9,7 +9,8 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Operator_Screen_App.Connections;
+using Operator_Screen_App.Connections.API;
+using Operator_Screen_App.Connections.Mail;
 using Operator_Screen_App.Items.Log.Attributes;
 using Operator_Screen_App.Items.Node;
 
@@ -30,7 +31,7 @@ namespace Operator_Screen_App.Pages
         {
             logger = NLog.LogManager.GetCurrentClassLogger();
 #if DEBUG
-            timeout = 10;
+            timeout = 3;
             messageDisplayTimeNormal = 3;
             messageDisplayTimeError = 5;
 #else
@@ -59,7 +60,7 @@ namespace Operator_Screen_App.Pages
                 // Attempt to send mail
                 try
                 {
-                    
+                    btnConfirm.Enabled = false;
                     Mail.Send();
 
                     tmrAlert.Start();
@@ -70,8 +71,6 @@ namespace Operator_Screen_App.Pages
                 }
                 catch (Exception ex)
                 {
-
-
                     tmrAlert.Start();
                     barTimer.Visible = true;
 
@@ -93,7 +92,7 @@ namespace Operator_Screen_App.Pages
 
         private void PopUp_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Prevent this form from closing properly
+            // Prevent this form from closing inappropriately
             e.Cancel = true;
         }
 
