@@ -16,6 +16,55 @@ namespace Operator_Screen_App.Pages
         private Node node;
         private Form parentForm;
 
+        private void setActionTaken()
+        {
+            tmrConfirm.Stop();
+            barConfirm.Visible = false;
+
+            btnConfirm.BackColor = Color.WhiteSmoke;
+            btnConfirm.Enabled = false;
+
+            btnDeny.BackColor = Color.WhiteSmoke;
+            btnDeny.Enabled = false;
+        }
+        private void alertStart()
+        {
+            tmrAlert.Start();
+            barTimer.Visible = true;
+        }
+        private void sendMail(bool _timedOut)
+        {
+            try
+            {
+                setActionTaken();
+
+                Mail.Send(node);
+
+                alertStart();
+
+                if (_timedOut)
+                {
+                    logger.Info("Mail Sent to Supervisor\nOperator Did Not Confirm Within Time");
+                    MessageBox.Show("Operator Did Not Confirm Within Time", "Mail Sent to Supervisor");
+                }
+                else
+                {
+                    logger.Info("Mail Sent to Supervisor\nOperator Denied The Entry");
+                    MessageBox.Show("Operator Denied The Entry", "Mail Sent to Supervisor");
+                }
+            }
+            catch (Exception ex)
+            {
+                alertStart();
+
+                logger.Error(ex.Message);
+                MessageBox.Show(ex.Message, "ERROR");
+            }
+
+            parentForm.Visible = true;
+            this.Close();
+            this.Dispose();
+        }
         public PopUp(Form _parent, VerifyStatusCode _statusCode, Node _node)
         {
             logger = NLog.LogManager.GetCurrentClassLogger();
@@ -42,33 +91,12 @@ namespace Operator_Screen_App.Pages
         {
             if (timeout < 1)
             {
-                tmrConfirm.Stop();
-                logger.Info("Manual Confirmation Not Done, Sending Mail to Supervisor");
+                logger.Info("Manual Confirm Timed Out\nSending Mail to Supervisor");
 
-                // Attempt to send mail
-                try
-                {
-                    btnConfirm.Enabled = false;
-                    Mail.Send(node);
+                setActionTaken();
 
-                    tmrAlert.Start();
-                    barTimer.Visible = true;
-
-                    logger.Info("Message Sent to Supervisor");
-                    MessageBox.Show("Message Sent to Supervisor", "Operator Hasn't Confirmed");
-                }
-                catch (Exception ex)
-                {
-                    tmrAlert.Start();
-                    barTimer.Visible = true;
-
-                    logger.Error(ex.Message);
-                    MessageBox.Show(ex.Message, "ERROR");
-                }                
-
-                parentForm.Visible = true;
-                this.Close();
-                this.Dispose();
+                // Attempt to send mail, with timed out is true
+                sendMail(true);
             }
             else
             {
@@ -86,9 +114,7 @@ namespace Operator_Screen_App.Pages
 
         private async void btnConfirm_Click(object sender, EventArgs e)
         {
-            btnConfirm.Enabled = false;
-            tmrConfirm.Stop();
-            barConfirm.Visible = false;
+            setActionTaken();
 
             try
             {
@@ -101,7 +127,7 @@ namespace Operator_Screen_App.Pages
 #if DEBUG
                 MessageBox.Show(nodeData.logID.ToString() + "\n" + Post.FormatDescription(nodeData), "POST body preview");
 #endif
-                logger.Info("Manual confirm registered, attempting to post to server");
+                logger.Info("Manual confirm registered\nAttempting to post to server");
 
                 string jsonResponse = await SendLog.SendJsonPostAsync(payload);
 
@@ -123,9 +149,8 @@ namespace Operator_Screen_App.Pages
 
                     }
 
-                    tmrAlert.Start();
+                    alertStart();
                     barTimer.Value = messageDisplayTimeNormal;
-                    barTimer.Visible = true;
 
                     logger.Info($"Server Returned: {jsonResponse}");
                     DialogResult skipped = MessageBox.Show($"Server Returned: {jsonResponse}", "Server Response", MessageBoxButtons.OK);
@@ -145,8 +170,7 @@ namespace Operator_Screen_App.Pages
                 messageDisplayTimeNormal = messageDisplayTimeError;
                 barTimer.Maximum = messageDisplayTimeError;
                 barTimer.Value = messageDisplayTimeError;
-                barTimer.Visible = true;
-                tmrAlert.Start();
+                alertStart();
 
                 DialogResult skipped = MessageBox.Show(ex.Message, "SERVER ERROR", MessageBoxButtons.OK);
 
@@ -173,6 +197,14 @@ namespace Operator_Screen_App.Pages
                 messageDisplayTimeNormal -= 1;
             }
             barTimer.Value = Math.Max(messageDisplayTimeNormal, (UInt16)0);
+        }
+
+        private void btnDeny_Click(object sender, EventArgs e)
+        {
+            logger.Info("Entry Denied\nSending Mail to Supervisor");
+
+            // Attempt to send mail, with timed out is false
+            sendMail(false);
         }
     }
 }

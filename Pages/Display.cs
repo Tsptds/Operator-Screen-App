@@ -118,7 +118,7 @@ namespace Operator_Screen_App
 
         private void popUp(VerifyStatusCode _code, Node _tail)
         {
-            logger.Info("Status code is invalid, Showing Manual Confirmation Window");
+            logger.Info($"Status code is invalid\nShowing Manual Confirmation Window For Entry:\n{_tail.Data.logID}");
             this.Visible = false;
             PopUp PopupScreen = new(this, _code, _tail);
             PopupScreen.Show();

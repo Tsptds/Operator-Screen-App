@@ -39,6 +39,7 @@
             barTimer = new ProgressBar();
             barConfirm = new ProgressBar();
             lblUsername = new Label();
+            btnDeny = new Button();
             SuspendLayout();
             // 
             // tmrConfirm
@@ -61,12 +62,14 @@
             // 
             // btnConfirm
             // 
-            btnConfirm.Location = new Point(250, 288);
+            btnConfirm.BackColor = Color.FromArgb(128, 255, 128);
+            btnConfirm.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnConfirm.Location = new Point(488, 288);
             btnConfirm.Name = "btnConfirm";
             btnConfirm.Size = new Size(305, 121);
             btnConfirm.TabIndex = 1;
             btnConfirm.Text = "Confirm This Entry";
-            btnConfirm.UseVisualStyleBackColor = true;
+            btnConfirm.UseVisualStyleBackColor = false;
             btnConfirm.Click += btnConfirm_Click;
             // 
             // lblAttention
@@ -152,6 +155,18 @@
             lblUsername.Text = "User:";
             lblUsername.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // btnDeny
+            // 
+            btnDeny.BackColor = Color.FromArgb(255, 128, 128);
+            btnDeny.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnDeny.Location = new Point(12, 288);
+            btnDeny.Name = "btnDeny";
+            btnDeny.Size = new Size(305, 121);
+            btnDeny.TabIndex = 8;
+            btnDeny.Text = "Deny";
+            btnDeny.UseVisualStyleBackColor = false;
+            btnDeny.Click += btnDeny_Click;
+            // 
             // PopUp
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -159,6 +174,7 @@
             AutoScroll = true;
             ClientSize = new Size(800, 450);
             ControlBox = false;
+            Controls.Add(btnDeny);
             Controls.Add(lblUsername);
             Controls.Add(barConfirm);
             Controls.Add(barTimer);
@@ -189,5 +205,6 @@
         private ProgressBar barTimer;
         private ProgressBar barConfirm;
         private Label lblUsername;
+        private Button btnDeny;
     }
 }
