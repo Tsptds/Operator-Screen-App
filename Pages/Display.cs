@@ -68,6 +68,15 @@ namespace Operator_Screen_App
                     }
                 }
             }
+            catch (ArgumentException ex)
+            {
+                logger.Error($"Missing INI Value Under API: {ex.ParamName}");
+                MessageBox.Show($"Missing INI Value Under API: {ex.ParamName}", "Settings.ini File Not Filled Correctly");
+
+                btnSimulateOp.Enabled = true;
+                btnLists.Enabled = true;
+                return;
+            }
             catch (Exception ex)
             {
                 logger.Error(ex);
