@@ -22,6 +22,7 @@
 - SMTP server is pre-set with gmail's smtp server. Use your newly created (or existing) email account and enter the credentials to username & password fields. Recommended to use the application password obtained above instead of the account password.
 - Port is again, defaulted to gmail smtp. Check your email service provider's instructions on setting up an smtp email server for other email providers.
 - Recommended to keep ssl on true, as many SMTP servers require it.
+- Google's guide on setting an SMTP email sender https://support.google.com/a/answer/176600?hl=en
 ### MAIL
 - MailTarget is the email address to receive the invalid entries.
 ### Side Notes
