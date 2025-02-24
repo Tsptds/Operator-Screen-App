@@ -6,7 +6,7 @@
 - Automated Mailing. In case of operator not confirming within 30 seconds, an email will be sent to the pre-set email address.
 - Timed auto closing alerts.
 ## Build Requirements
-- .Net 8.0 Framework
+- .NET 8.0 Framework
 - NLog
 - Build the source with Visual Studio 2022.
 ## Setup
@@ -27,6 +27,7 @@
 ### Side Notes
 - Make sure all the fields are filled in every category. Ports have to be numeric, SSL is true/false.
 ## Usage
+- Download .NET 8.0 Runtime x64 for windows.
 - Launch the exe file. To simulate an entry, click on the "Simulate Operation" button. This will retrieve a JSON object from the API, deserialize it and add it to the grid view.
 - If the entry has an invalid status code, the security operator will be alerted by a pop-up with 30 seconds of countdown.
 - Security operator has the option to manually confirm the entry, or deny it.
