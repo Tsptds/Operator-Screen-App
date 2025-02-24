@@ -16,15 +16,15 @@
 - Navigate to root folder (cd Operator-Screen-App).
 - Find Settings.ini file.
 - Inside the ini, there are API, SMTP and MAIL headers.
-## API
+### API
 - The app is designed to be used on the following API: "interview.ones.com.tr" on the endpoint "/API/AccessLog". Fill the API settings accordingly.
-## SMTP Server
+### SMTP Server
 - SMTP server is pre-set with gmail's smtp server. Use your newly created (or existing) email account and enter the credentials to username & password fields.
 - Port is again, defaulted to gmail smtp. Check your email service provider's instructions on setting up an smtp email server for other email providers.
 - Recommended to keep ssl on true, as many SMTP servers require it.
-## MAIL
+### MAIL
 - MailTarget is the email address to receive the invalid entries.
-## Side Notes
+### Side Notes
 - Make sure all the fields are filled in every category. Ports have to be numeric, SSL is true/false.
 ## Usage
 - Launch the exe file. To simulate an entry, click on the "Simulate Operation" button. This will retrieve a JSON object from the API, deserialize it and add it to the grid view.
