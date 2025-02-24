@@ -19,7 +19,7 @@
 ### API
 - The app is designed to be used on the following API: "interview.ones.com.tr" on the endpoint "/API/AccessLog". Fill the API settings accordingly.
 - API uses port 443 (HTTPS default).
-- Timeout is in milliseconds, default is 5000 ms (5 seconds).
+- Timeout is the duration before client cancels API requests in milliseconds, default is 5000 ms (5 seconds).
 ### SMTP Server
 - SMTP server is pre-set with gmail's smtp server. Use your newly created (or existing) email account and enter the credentials to username & password fields. Recommended to use the application password obtained above instead of the account password.
 - Port is defaulted to one of gmail options (587). Check your email service provider's instructions on setting up an smtp email server for other email providers.
