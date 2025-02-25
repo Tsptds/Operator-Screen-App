@@ -5,7 +5,7 @@
         kSuccess = 0,
         kNot_Found,
         kNot_Enrolled,
-        kNot_Allowed_Bio_Typ,
+        kNot_Allowed_Bio_Type,
         kNot_Verified,
         kCard_Not_Supported
     }

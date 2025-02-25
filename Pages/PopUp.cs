@@ -36,8 +36,6 @@ namespace Operator_Screen_App.Pages
         {
             try
             {
-                setActionTaken();
-
                 Mail.Send(node);
 
                 alertStart();
@@ -202,6 +200,8 @@ namespace Operator_Screen_App.Pages
         private void btnDeny_Click(object sender, EventArgs e)
         {
             logger.Info("Entry Denied\nSending Mail to Supervisor");
+
+            setActionTaken();
 
             // Attempt to send mail, with timed out is false
             sendMail(false);
