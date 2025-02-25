@@ -6,11 +6,11 @@
 - Automated Mailing. In case of operator not confirming within 30 seconds, an email will be sent to the pre-set email address.
 - Timed auto closing alerts.
 ## Build Requirements
-- .NET 8.0 Framework
-- NLog
+- Clone the repo https://github.com/Tsptds/Operator-Screen-App.git
+- Install .NET 8.0 Framework
+- Add NLog to Project
 - Build the source with Visual Studio 2022.
 ## Setup
-- Clone the repo https://github.com/Tsptds/Operator-Screen-App.git
 - Setup an email that will send the invalid entries. Recommended way is described below:
 - Setup the account (Gmail, outlook etc.) with 2 factor authentication and obtain an application password. Then note it down.
 - Navigate to root folder (cd Operator-Screen-App).
